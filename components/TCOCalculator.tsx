@@ -6,15 +6,14 @@ export default function App() {
     monthlyVisitors: 50000,
     currentConversionRate: 2.5,
     avgRevenuePerConversion: 5000,
-    implementationCost: 300000,
-    annualMaintenanceCost: 100000,
-    conversionRateIncrease: 5,
-    engagementIncrease: 5,
-    timeToValue: 6
+    implementationCost: 150000,
+    annualMaintenanceCost: 50000,
+    conversionRateIncrease: 35,
+    engagementIncrease: 25
   });
 
   const handleInputChange = (field, value) => {
-    setInputs(prev => ({ ...prev, [field]: parseFloat(value) || 0 }));
+    setInputs(prev => ({ ...prev, [field]: parseFloat(value) }));
   };
 
   // Calculations
@@ -57,121 +56,160 @@ export default function App() {
     }).format(num);
   };
 
+  const SliderInput = ({ label, value, onChange, min, max, step, prefix = '', suffix = '', helper }) => (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
+        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <span className="text-lg font-bold text-blue-600">
+          {prefix}{formatNumber(value)}{suffix}
+        </span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(parseFloat(e.target.value))}
+        className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer slider"
+        style={{
+          background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((value - min) / (max - min)) * 100}%, #dbeafe ${((value - min) / (max - min)) * 100}%, #dbeafe 100%)`
+        }}
+      />
+      {helper && <p className="text-xs text-gray-500">{helper}</p>}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
+      <style>{`
+        .slider::-webkit-slider-thumb {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #3b82f6;
+          cursor: pointer;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          transition: all 0.2s;
+        }
+        .slider::-webkit-slider-thumb:hover {
+          transform: scale(1.2);
+          background: #2563eb;
+        }
+        .slider::-moz-range-thumb {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #3b82f6;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          transition: all 0.2s;
+        }
+        .slider::-moz-range-thumb:hover {
+          transform: scale(1.2);
+          background: #2563eb;
+        }
+      `}</style>
+
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Word & Brown Personalization ROI Calculator
           </h1>
-          <p className="text-gray-600">Calculate the revenue impact of website personalization</p>
+          <p className="text-gray-600">Adjust the sliders to see revenue impact in real-time</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-8 mb-8">
           {/* Input Section */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <Calculator className="w-6 h-6 text-blue-600" />
+          <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Calculator className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
               Your Inputs
             </h2>
 
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Monthly Website Visitors
-                </label>
-                <input
-                  type="number"
-                  value={inputs.monthlyVisitors}
-                  onChange={(e) => handleInputChange('monthlyVisitors', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+            <div className="space-y-6">
+              <SliderInput
+                label="Monthly Website Visitors"
+                value={inputs.monthlyVisitors}
+                onChange={(val) => handleInputChange('monthlyVisitors', val)}
+                min={1000}
+                max={200000}
+                step={1000}
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Current Conversion Rate (%)
-                </label>
-                <input
-                  type="number"
-                  step="0.1"
-                  value={inputs.currentConversionRate}
-                  onChange={(e) => handleInputChange('currentConversionRate', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+              <SliderInput
+                label="Current Conversion Rate"
+                value={inputs.currentConversionRate}
+                onChange={(val) => handleInputChange('currentConversionRate', val)}
+                min={0.5}
+                max={10}
+                step={0.1}
+                suffix="%"
+              />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Average Revenue per Conversion ($)
-                </label>
-                <input
-                  type="number"
-                  value={inputs.avgRevenuePerConversion}
-                  onChange={(e) => handleInputChange('avgRevenuePerConversion', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+              <SliderInput
+                label="Average Revenue per Conversion"
+                value={inputs.avgRevenuePerConversion}
+                onChange={(val) => handleInputChange('avgRevenuePerConversion', val)}
+                min={500}
+                max={20000}
+                step={100}
+                prefix="$"
+              />
 
-              <div className="border-t pt-5 mt-5">
+              <div className="border-t pt-6 mt-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Investment Costs</h3>
                 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Implementation Cost ($)
-                    </label>
-                    <input
-                      type="number"
-                      value={inputs.implementationCost}
-                      onChange={(e) => handleInputChange('implementationCost', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
+                <div className="space-y-6">
+                  <SliderInput
+                    label="Implementation Cost"
+                    value={inputs.implementationCost}
+                    onChange={(val) => handleInputChange('implementationCost', val)}
+                    min={50000}
+                    max={500000}
+                    step={10000}
+                    prefix="$"
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Annual Maintenance Cost ($)
-                    </label>
-                    <input
-                      type="number"
-                      value={inputs.annualMaintenanceCost}
-                      onChange={(e) => handleInputChange('annualMaintenanceCost', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
+                  <SliderInput
+                    label="Annual Maintenance Cost"
+                    value={inputs.annualMaintenanceCost}
+                    onChange={(val) => handleInputChange('annualMaintenanceCost', val)}
+                    min={10000}
+                    max={150000}
+                    step={5000}
+                    prefix="$"
+                  />
                 </div>
               </div>
 
-              <div className="border-t pt-5 mt-5">
+              <div className="border-t pt-6 mt-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Expected Improvements</h3>
                 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Conversion Rate Increase (%)
-                    </label>
-                    <input
-                      type="number"
-                      value={inputs.conversionRateIncrease}
-                      onChange={(e) => handleInputChange('conversionRateIncrease', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Industry avg: 20-50%</p>
-                  </div>
+                <div className="space-y-6">
+                  <SliderInput
+                    label="Conversion Rate Increase"
+                    value={inputs.conversionRateIncrease}
+                    onChange={(val) => handleInputChange('conversionRateIncrease', val)}
+                    min={10}
+                    max={100}
+                    step={5}
+                    suffix="%"
+                    helper="Industry avg: 20-50%"
+                  />
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Customer Engagement Revenue Lift (%)
-                    </label>
-                    <input
-                      type="number"
-                      value={inputs.engagementIncrease}
-                      onChange={(e) => handleInputChange('engagementIncrease', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">From cross-sell, retention, etc.</p>
-                  </div>
+                  <SliderInput
+                    label="Customer Engagement Revenue Lift"
+                    value={inputs.engagementIncrease}
+                    onChange={(val) => handleInputChange('engagementIncrease', val)}
+                    min={0}
+                    max={50}
+                    step={5}
+                    suffix="%"
+                    helper="From cross-sell, retention, etc."
+                  />
                 </div>
               </div>
             </div>
@@ -180,113 +218,113 @@ export default function App() {
           {/* Results Section */}
           <div className="space-y-6">
             {/* Key Metrics */}
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white">
-              <h2 className="text-2xl font-bold mb-6">Revenue Impact</h2>
+            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
+              <h2 className="text-xl md:text-2xl font-bold mb-6">Revenue Impact</h2>
               
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-                  <div className="text-sm opacity-90 mb-1">Annual Revenue Lift</div>
-                  <div className="text-3xl font-bold">{formatCurrency(annualRevenueLift)}</div>
+                  <div className="text-xs md:text-sm opacity-90 mb-1">Annual Revenue Lift</div>
+                  <div className="text-xl md:text-2xl font-bold">{formatCurrency(annualRevenueLift)}</div>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-                  <div className="text-sm opacity-90 mb-1">3-Year Revenue Increase</div>
-                  <div className="text-3xl font-bold">{formatCurrency(threeYearRevenueLift)}</div>
+                  <div className="text-xs md:text-sm opacity-90 mb-1">3-Year Revenue Increase</div>
+                  <div className="text-xl md:text-2xl font-bold">{formatCurrency(threeYearRevenueLift)}</div>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-                  <div className="text-sm opacity-90 mb-1">ROI (3 Years)</div>
-                  <div className="text-3xl font-bold">{roi.toFixed(0)}%</div>
+                  <div className="text-xs md:text-sm opacity-90 mb-1">ROI (3 Years)</div>
+                  <div className="text-xl md:text-2xl font-bold">{roi.toFixed(0)}%</div>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-                  <div className="text-sm opacity-90 mb-1">Payback Period</div>
-                  <div className="text-3xl font-bold">{paybackMonths.toFixed(1)} months</div>
+                  <div className="text-xs md:text-sm opacity-90 mb-1">Payback Period</div>
+                  <div className="text-xl md:text-2xl font-bold">{paybackMonths.toFixed(1)} mo</div>
                 </div>
               </div>
             </div>
 
             {/* Detailed Breakdown */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Detailed Analysis</h3>
+            <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Detailed Analysis</h3>
               
               <div className="space-y-4">
                 <div className="border-b pb-3">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-700">Current Annual Revenue</span>
-                    <span className="text-lg font-semibold text-gray-900">{formatCurrency(currentRevenue)}</span>
+                    <span className="text-sm font-medium text-gray-700">Current Annual Revenue</span>
+                    <span className="text-base md:text-lg font-semibold text-gray-900">{formatCurrency(currentRevenue)}</span>
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-xs md:text-sm text-gray-500">
                     {formatNumber(currentConversions)} conversions at {inputs.currentConversionRate}% rate
                   </div>
                 </div>
 
                 <div className="border-b pb-3">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-700">New Annual Revenue</span>
-                    <span className="text-lg font-semibold text-green-600">{formatCurrency(totalNewRevenue)}</span>
+                    <span className="text-sm font-medium text-gray-700">New Annual Revenue</span>
+                    <span className="text-base md:text-lg font-semibold text-green-600">{formatCurrency(totalNewRevenue)}</span>
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-xs md:text-sm text-gray-500">
                     {formatNumber(newConversions)} conversions at {newConversionRate.toFixed(2)}% rate
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-xs md:text-sm text-gray-500">
                     + {formatCurrency(engagementRevenue)} from engagement lift
                   </div>
                 </div>
 
                 <div className="border-b pb-3">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium text-gray-700">Total 3-Year Investment</span>
-                    <span className="text-lg font-semibold text-gray-900">{formatCurrency(totalCostThreeYears)}</span>
+                    <span className="text-sm font-medium text-gray-700">Total 3-Year Investment</span>
+                    <span className="text-base md:text-lg font-semibold text-gray-900">{formatCurrency(totalCostThreeYears)}</span>
                   </div>
-                  <div className="text-sm text-gray-500">
+                  <div className="text-xs md:text-sm text-gray-500">
                     {formatCurrency(inputs.implementationCost)} implementation + {formatCurrency(inputs.annualMaintenanceCost * 3)} maintenance
                   </div>
                 </div>
 
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="flex justify-between items-center">
-                    <span className="font-bold text-gray-900">Net Benefit (3 Years)</span>
-                    <span className="text-2xl font-bold text-blue-600">{formatCurrency(netBenefit)}</span>
+                    <span className="text-sm md:text-base font-bold text-gray-900">Net Benefit (3 Years)</span>
+                    <span className="text-xl md:text-2xl font-bold text-blue-600">{formatCurrency(netBenefit)}</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Key Benefits */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Key Benefits</h3>
+            <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Key Benefits</h3>
               
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <MousePointer className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="font-medium text-gray-900">Higher Conversion Rates</div>
-                    <div className="text-sm text-gray-600">Personalized experiences convert {inputs.conversionRateIncrease}% better</div>
+                    <div className="text-sm font-medium text-gray-900">Higher Conversion Rates</div>
+                    <div className="text-xs md:text-sm text-gray-600">Personalized experiences convert {inputs.conversionRateIncrease}% better</div>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
                   <Users className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="font-medium text-gray-900">Improved Customer Engagement</div>
-                    <div className="text-sm text-gray-600">Better retention and cross-sell opportunities</div>
+                    <div className="text-sm font-medium text-gray-900">Improved Customer Engagement</div>
+                    <div className="text-xs md:text-sm text-gray-600">Better retention and cross-sell opportunities</div>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
                   <TrendingUp className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="font-medium text-gray-900">Competitive Advantage</div>
-                    <div className="text-sm text-gray-600">Stand out in the insurance broker market</div>
+                    <div className="text-sm font-medium text-gray-900">Competitive Advantage</div>
+                    <div className="text-xs md:text-sm text-gray-600">Stand out in the insurance broker market</div>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
                   <DollarSign className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <div className="font-medium text-gray-900">Quick Payback</div>
-                    <div className="text-sm text-gray-600">Investment pays for itself in {paybackMonths.toFixed(1)} months</div>
+                    <div className="text-sm font-medium text-gray-900">Quick Payback</div>
+                    <div className="text-xs md:text-sm text-gray-600">Investment pays for itself in {paybackMonths.toFixed(1)} months</div>
                   </div>
                 </div>
               </div>
@@ -294,12 +332,12 @@ export default function App() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">About This Calculator</h3>
-          <p className="text-gray-600 text-sm leading-relaxed">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <h3 className="text-base md:text-lg font-bold text-gray-900 mb-3">About This Calculator</h3>
+          <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
             This TCO calculator demonstrates the financial impact of implementing website personalization for Word & Brown. 
             The calculations are based on industry benchmarks showing that personalized experiences typically increase conversion 
-            rates by 20-50% and improve customer lifetime value through better engagement. Adjust the inputs above to model 
+            rates by 20-50% and improve customer lifetime value through better engagement. Adjust the sliders above to model 
             different scenarios and see how personalization investment could impact your bottom line.
           </p>
         </div>
