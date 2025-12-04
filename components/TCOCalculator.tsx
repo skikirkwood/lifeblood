@@ -5,7 +5,7 @@ export default function App() {
   const [valueDriver, setValueDriver] = useState('revenue');
   const [inputs, setInputs] = useState({
     monthlyVisitors: 50000,
-    currentConversionRate: 2.5,
+    currentConversionRate: 0.1,
     avgRevenuePerConversion: 5000,
     campaignLaunchTime: 30,
     developerHourlyRate: 150,
@@ -24,7 +24,7 @@ export default function App() {
     repeatCustomerRate: 30,
     implementationCost: 150000,
     annualLicenseCost: 75000,
-    conversionRateIncrease: 5,
+    conversionRateIncrease: 35,
     timeToMarketReduction: 60,
     devEfficiencyGain: 50,
     downtimeReduction: 90,
@@ -115,11 +115,13 @@ export default function App() {
     return new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
   };
 
-  const SliderInput = ({ label, value, onChange, min, max, step, prefix = '', suffix = '', helper }) => (
+  const SliderInput = ({ label, value, onChange, min, max, step, prefix = '', suffix = '', helper, decimals }) => (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
         <label className="text-sm font-medium text-gray-700">{label}</label>
-        <span className="text-base font-bold text-blue-600">{prefix}{formatNumber(value)}{suffix}</span>
+        <span className="text-base font-bold text-blue-600">
+          {prefix}{decimals !== undefined ? value.toFixed(decimals) : formatNumber(value)}{suffix}
+        </span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(parseFloat(e.target.value))} className="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer slider" style={{ background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((value - min) / (max - min)) * 100}%, #dbeafe ${((value - min) / (max - min)) * 100}%, #dbeafe 100%)` }} />
       {helper && <p className="text-xs text-gray-500">{helper}</p>}
@@ -166,7 +168,7 @@ export default function App() {
                 <>
                   <div className="bg-blue-50 rounded-lg p-4 mb-4"><h3 className="font-semibold text-blue-900 mb-2">Revenue Growth</h3><p className="text-sm text-blue-700">Accelerate time-to-market and increase conversions with personalized content</p></div>
                   <SliderInput label="Monthly Website Visitors" value={inputs.monthlyVisitors} onChange={(val) => handleInputChange('monthlyVisitors', val)} min={10000} max={500000} step={10000} />
-                  <SliderInput label="Current Conversion Rate" value={inputs.currentConversionRate} onChange={(val) => handleInputChange('currentConversionRate', val)} min={0.5} max={10} step={0.1} suffix="%" />
+                  <SliderInput label="Current Conversion Rate" value={inputs.currentConversionRate} onChange={(val) => handleInputChange('currentConversionRate', val)} min={0.01} max={1} step={0.01} suffix="%" decimals={2} />
                   <SliderInput label="Avg Revenue per Conversion" value={inputs.avgRevenuePerConversion} onChange={(val) => handleInputChange('avgRevenuePerConversion', val)} min={500} max={20000} step={500} prefix="$" />
                   <SliderInput label="Campaign Launch Time (Days)" value={inputs.campaignLaunchTime} onChange={(val) => handleInputChange('campaignLaunchTime', val)} min={7} max={90} step={1} helper="Current time to launch" />
                   <div className="border-t pt-4">
