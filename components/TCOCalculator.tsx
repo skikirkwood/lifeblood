@@ -236,6 +236,12 @@ export default function App() {
       margin-bottom: 24px;
     }
     
+    .title-content {
+      max-width: 50%;
+      position: relative;
+      z-index: 1;
+    }
+    
     h1 {
       font-size: 52px;
       font-weight: 700;
@@ -280,9 +286,9 @@ export default function App() {
     .geo-pattern {
       position: absolute;
       right: 0;
-      top: 100px;
+      top: 0;
       width: 45%;
-      height: calc(100% - 100px);
+      height: 100%;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       grid-template-rows: repeat(7, 1fr);
@@ -665,9 +671,11 @@ export default function App() {
     <!-- Slide 1: Title -->
     <div class="slide active" data-slide="0" style="position: relative;">
       <img src="${logoUrl}" alt="Contentful" class="logo">
-      <div class="eyebrow">${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
-      <h1>Business Case<br>for Contentful</h1>
-      <p class="subtitle">ROI Analysis & Value Assessment</p>
+      <div class="title-content">
+        <div class="eyebrow">${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
+        <h1>Business Case<br>for Contentful</h1>
+        <p class="subtitle">ROI Analysis & Value Assessment</p>
+      </div>
       
       <div class="geo-pattern">
         <div class="geo-shape geo-pill bg-green" style="grid-column: span 2;"></div>
