@@ -537,6 +537,16 @@ export default function App() {
       font-weight: bold;
     }
     
+    .proof-section a {
+      color: var(--ctfl-blue);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    
+    .proof-section a:hover {
+      color: #0066CC;
+    }
+    
     /* CTA section */
     .cta-section {
       background: var(--ctfl-blue);
@@ -822,9 +832,9 @@ export default function App() {
           <div class="proof-section">
             <h4>Customer Success Stories</h4>
             <ul>
-              <li><strong>Kraft Heinz:</strong> 78% conversion rate increase</li>
-              <li><strong>Ruggable:</strong> 25% higher conversions, 7x CTR</li>
-              <li><strong>KFC:</strong> 43% digital sales growth</li>
+              <li><a href="https://www.contentful.com/case-studies/kraft-heinz/" target="_blank">Kraft Heinz:</a> 78% conversion rate increase</li>
+              <li><a href="https://www.contentful.com/case-studies/ruggable/" target="_blank">Ruggable:</a> 25% higher conversions, 7x CTR</li>
+              <li><a href="https://www.contentful.com/case-studies/kfc-global/" target="_blank">KFC:</a> 43% digital sales growth</li>
             </ul>
           </div>
         </div>
@@ -888,9 +898,9 @@ export default function App() {
           <div class="proof-section">
             <h4>Customer Success Stories</h4>
             <ul>
-              <li><strong>Audible:</strong> 80% decrease in content production time</li>
-              <li><strong>Shiseido:</strong> 50% reduction in content costs</li>
-              <li><strong>Costa Coffee:</strong> 15 sites built in 15 minutes each</li>
+              <li><a href="https://www.contentful.com/case-studies/audible/" target="_blank">Audible:</a> 80% decrease in content production time</li>
+              <li><a href="https://www.contentful.com/case-studies/shiseido-professional/" target="_blank">Shiseido:</a> 50% reduction in content costs</li>
+              <li><a href="https://www.contentful.com/case-studies/costa-coffee/" target="_blank">Costa Coffee:</a> 15 sites built in 15 minutes each</li>
             </ul>
           </div>
         </div>
@@ -954,9 +964,9 @@ export default function App() {
           <div class="proof-section">
             <h4>Enterprise-Grade Reliability</h4>
             <ul>
-              <li><strong>Milwaukee Bucks:</strong> 2.9M app opens, zero downtime</li>
-              <li><strong>TELUS:</strong> Consolidated 11 CMS platforms to one</li>
-              <li><strong>Vodafone:</strong> 40% faster pages, zero outages</li>
+              <li><a href="https://www.contentful.com/case-studies/milwaukeebucks/" target="_blank">Milwaukee Bucks:</a> 2.9M app opens, zero downtime</li>
+              <li><a href="https://www.contentful.com/case-studies/telus-support-portal/" target="_blank">TELUS:</a> Consolidated 11 CMS platforms to one</li>
+              <li><a href="https://www.contentful.com/case-studies/vodafone/" target="_blank">Vodafone:</a> 40% faster pages, zero outages</li>
             </ul>
           </div>
         </div>
@@ -1020,9 +1030,9 @@ export default function App() {
           <div class="proof-section">
             <h4>Customer Success Stories</h4>
             <ul>
-              <li><strong>Kraft Heinz:</strong> 30% engagement increase</li>
-              <li><strong>TELUS:</strong> 14% conversion uplift, 30% faster loads</li>
-              <li><strong>BMW:</strong> 47% increase in test-drive bookings</li>
+              <li><a href="https://www.contentful.com/case-studies/kraft-heinz/" target="_blank">Kraft Heinz:</a> 30% engagement increase</li>
+              <li><a href="https://www.contentful.com/case-studies/telus-support-portal/" target="_blank">TELUS:</a> 14% conversion uplift, 30% faster loads</li>
+              <li><a href="https://www.contentful.com/case-studies/bmw-tmwx/" target="_blank">BMW:</a> 47% increase in test-drive bookings</li>
             </ul>
           </div>
         </div>
