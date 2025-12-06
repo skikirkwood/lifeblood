@@ -421,19 +421,42 @@ export default function App() {
     }
     
     /* Navigation Controls */
-    .nav-controls {
+    .nav-wrapper {
       position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 30px;
+    }
+    
+    .nav-controls {
       display: flex;
       align-items: center;
       gap: 20px;
-      z-index: 100;
       background: rgba(15, 23, 42, 0.9);
       padding: 12px 24px;
       border-radius: 50px;
       backdrop-filter: blur(10px);
+      opacity: 1;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .nav-controls.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+    }
+    
+    .nav-wrapper:hover .nav-controls.hidden {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
     }
     
     .nav-btn {
@@ -494,16 +517,22 @@ export default function App() {
     }
     
     .keyboard-hint {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
       color: rgba(255,255,255,0.5);
       font-size: 12px;
-      z-index: 100;
+      margin-bottom: 10px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
     }
     
-    .title-slide .nav-controls {
+    .keyboard-hint.hidden {
+      opacity: 0;
+    }
+    
+    .nav-wrapper:hover .keyboard-hint.hidden {
+      opacity: 1;
+    }
+    
+    .title-slide ~ .nav-wrapper .nav-controls {
       background: rgba(255,255,255,0.1);
     }
   </style>
@@ -802,18 +831,22 @@ export default function App() {
     </div>
 
     <!-- Navigation Controls -->
-    <div class="nav-controls">
-      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">←</button>
-      <div class="slide-indicator" id="slideIndicator"></div>
-      <span class="slide-counter" id="slideCounter">1 / 7</span>
-      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">→</button>
+    <div class="nav-wrapper" id="navWrapper">
+      <div class="keyboard-hint" id="keyboardHint">Use ← → arrow keys or click to navigate</div>
+      <div class="nav-controls" id="navControls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">←</button>
+        <div class="slide-indicator" id="slideIndicator"></div>
+        <span class="slide-counter" id="slideCounter">1 / 7</span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">→</button>
+      </div>
     </div>
-    <div class="keyboard-hint">Use ← → arrow keys or click to navigate</div>
   </div>
 
   <script>
     let currentSlide = 0;
     const totalSlides = 7;
+    let hideTimeout;
+    const HIDE_DELAY = 5000;
     
     function initSlideshow() {
       const indicator = document.getElementById('slideIndicator');
@@ -824,6 +857,27 @@ export default function App() {
         indicator.appendChild(dot);
       }
       updateNav();
+      startHideTimer();
+    }
+    
+    function showNav() {
+      document.getElementById('navControls').classList.remove('hidden');
+      document.getElementById('keyboardHint').classList.remove('hidden');
+    }
+    
+    function hideNav() {
+      document.getElementById('navControls').classList.add('hidden');
+      document.getElementById('keyboardHint').classList.add('hidden');
+    }
+    
+    function startHideTimer() {
+      clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(hideNav, HIDE_DELAY);
+    }
+    
+    function resetHideTimer() {
+      showNav();
+      startHideTimer();
     }
     
     function changeSlide(direction) {
@@ -831,6 +885,7 @@ export default function App() {
       if (newSlide >= 0 && newSlide < totalSlides) {
         goToSlide(newSlide);
       }
+      resetHideTimer();
     }
     
     function goToSlide(index) {
@@ -842,6 +897,7 @@ export default function App() {
       document.querySelectorAll('.dot')[index].classList.add('active');
       
       updateNav();
+      resetHideTimer();
     }
     
     function updateNav() {
@@ -859,6 +915,15 @@ export default function App() {
         changeSlide(-1);
       }
     });
+    
+    document.addEventListener('mousemove', resetHideTimer);
+    
+    document.getElementById('navWrapper').addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      showNav();
+    });
+    
+    document.getElementById('navWrapper').addEventListener('mouseleave', startHideTimer);
     
     initSlideshow();
   </script>
