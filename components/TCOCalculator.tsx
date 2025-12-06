@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DollarSign, TrendingUp, Users, Shield, Zap, Calculator, Download } from 'lucide-react';
+import { DollarSign, TrendingUp, Users, Shield, Zap, Calculator, Download, Presentation } from 'lucide-react';
 
 export default function App() {
   const [valueDriver, setValueDriver] = useState('revenue');
@@ -155,6 +155,578 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
     link.setAttribute('download', 'contentful-roi-inputs.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const generatePresentation = () => {
+    const logoUrl = 'https://images.ctfassets.net/jtqsy5pye0zd/6wNuQ2xMvbw134rccObi0q/bf61badc6d6d9780609e541713f0bba6/Contentful_Logo_2.5_Dark.svg';
+    
+    const pageStyles = `
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: #f8fafc;
+          color: #1e293b;
+          line-height: 1.6;
+        }
+        
+        .page {
+          width: 100%;
+          min-height: 100vh;
+          padding: 60px 80px;
+          page-break-after: always;
+          position: relative;
+          background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+        }
+        
+        .page:last-child { page-break-after: avoid; }
+        
+        .logo {
+          position: absolute;
+          top: 40px;
+          left: 60px;
+          height: 36px;
+        }
+        
+        .page-number {
+          position: absolute;
+          bottom: 40px;
+          right: 60px;
+          font-size: 14px;
+          color: #94a3b8;
+        }
+        
+        .title-page {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+          color: white;
+        }
+        
+        .title-page .logo { filter: brightness(0) invert(1); }
+        
+        .title-page h1 {
+          font-size: 56px;
+          font-weight: 800;
+          margin-bottom: 24px;
+          background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .title-page .subtitle {
+          font-size: 24px;
+          opacity: 0.9;
+          max-width: 600px;
+        }
+        
+        .title-page .date {
+          margin-top: 60px;
+          font-size: 16px;
+          opacity: 0.7;
+        }
+        
+        h2 {
+          font-size: 42px;
+          font-weight: 700;
+          margin-bottom: 40px;
+          color: #0f172a;
+        }
+        
+        h3 {
+          font-size: 24px;
+          font-weight: 600;
+          margin-bottom: 20px;
+          color: #334155;
+        }
+        
+        .content-area {
+          margin-top: 80px;
+        }
+        
+        .metric-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 24px;
+          margin-bottom: 40px;
+        }
+        
+        .metric-card {
+          background: white;
+          border-radius: 16px;
+          padding: 32px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .metric-card.highlight {
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+        }
+        
+        .metric-label {
+          font-size: 14px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          opacity: 0.7;
+          margin-bottom: 8px;
+        }
+        
+        .metric-value {
+          font-size: 36px;
+          font-weight: 700;
+        }
+        
+        .breakdown-list {
+          background: white;
+          border-radius: 16px;
+          padding: 32px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .breakdown-item {
+          display: flex;
+          justify-content: space-between;
+          padding: 16px 0;
+          border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .breakdown-item:last-child { border-bottom: none; }
+        
+        .breakdown-item .label { color: #64748b; }
+        .breakdown-item .value { font-weight: 600; color: #0f172a; }
+        
+        .proof-points {
+          background: #eff6ff;
+          border-left: 4px solid #3b82f6;
+          border-radius: 0 12px 12px 0;
+          padding: 24px 32px;
+          margin-top: 32px;
+        }
+        
+        .proof-points h4 {
+          color: #1e40af;
+          font-weight: 600;
+          margin-bottom: 12px;
+        }
+        
+        .proof-points ul {
+          list-style: none;
+          color: #1e3a8a;
+        }
+        
+        .proof-points li {
+          padding: 6px 0;
+        }
+        
+        .proof-points li::before {
+          content: "✓ ";
+          color: #10b981;
+          font-weight: bold;
+        }
+        
+        .summary-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          margin-bottom: 40px;
+        }
+        
+        .summary-card {
+          text-align: center;
+          padding: 24px;
+          border-radius: 12px;
+        }
+        
+        .summary-card.green { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+        .summary-card.blue { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+        .summary-card.purple { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
+        .summary-card.orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
+        
+        .summary-card .icon { font-size: 32px; margin-bottom: 12px; }
+        .summary-card .name { font-size: 14px; color: #64748b; margin-bottom: 4px; }
+        .summary-card .amount { font-size: 24px; font-weight: 700; }
+        
+        .summary-card.green .amount { color: #059669; }
+        .summary-card.blue .amount { color: #2563eb; }
+        .summary-card.purple .amount { color: #7c3aed; }
+        .summary-card.orange .amount { color: #ea580c; }
+        
+        .investment-table {
+          background: white;
+          border-radius: 16px;
+          padding: 32px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .investment-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 16px 0;
+          border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .investment-row.total {
+          border-bottom: none;
+          border-top: 2px solid #0f172a;
+          margin-top: 8px;
+          padding-top: 24px;
+          font-weight: 700;
+          font-size: 20px;
+        }
+        
+        .cta-section {
+          text-align: center;
+          margin-top: 60px;
+          padding: 40px;
+          background: linear-gradient(135deg, #0f172a, #1e3a5f);
+          border-radius: 20px;
+          color: white;
+        }
+        
+        .cta-section h3 {
+          color: white;
+          font-size: 28px;
+        }
+        
+        .cta-section p {
+          opacity: 0.9;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        
+        @media print {
+          .page { min-height: 100vh; }
+        }
+      </style>
+    `;
+    
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contentful Business Case</title>
+  ${pageStyles}
+</head>
+<body>
+  <!-- Title Page -->
+  <div class="page title-page">
+    <img src="${logoUrl}" alt="Contentful" class="logo">
+    <h1>Business Case for Contentful</h1>
+    <p class="subtitle">A comprehensive ROI analysis demonstrating the value of migrating to a modern, composable content platform</p>
+    <p class="date">Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+    <div class="page-number" style="color: rgba(255,255,255,0.5);">1</div>
+  </div>
+
+  <!-- Executive Summary Page -->
+  <div class="page">
+    <img src="${logoUrl}" alt="Contentful" class="logo">
+    <div class="content-area">
+      <h2>Executive Summary</h2>
+      <div class="metric-grid">
+        <div class="metric-card highlight">
+          <div class="metric-label">3-Year Total Benefit</div>
+          <div class="metric-value">${formatCurrency(threeYearBenefit)}</div>
+        </div>
+        <div class="metric-card highlight">
+          <div class="metric-label">Return on Investment</div>
+          <div class="metric-value">${roi.toFixed(0)}%</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Annual Benefit</div>
+          <div class="metric-value">${formatCurrency(totalAnnualBenefit)}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Payback Period</div>
+          <div class="metric-value">${paybackMonths.toFixed(1)} months</div>
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-card green">
+          <div class="icon">📈</div>
+          <div class="name">Revenue Growth</div>
+          <div class="amount">${formatCurrency(revenue.totalLift)}</div>
+        </div>
+        <div class="summary-card blue">
+          <div class="icon">⚡</div>
+          <div class="name">Efficiency</div>
+          <div class="amount">${formatCurrency(efficiency.totalSavings)}</div>
+        </div>
+        <div class="summary-card purple">
+          <div class="icon">🛡️</div>
+          <div class="name">Risk Mitigation</div>
+          <div class="amount">${formatCurrency(risk.totalRiskReduction)}</div>
+        </div>
+        <div class="summary-card orange">
+          <div class="icon">👥</div>
+          <div class="name">Customer Experience</div>
+          <div class="amount">${formatCurrency(cx.totalCXValue)}</div>
+        </div>
+      </div>
+    </div>
+    <div class="page-number">2</div>
+  </div>
+
+  <!-- Revenue Growth Page -->
+  <div class="page">
+    <img src="${logoUrl}" alt="Contentful" class="logo">
+    <div class="content-area">
+      <h2>Revenue Growth</h2>
+      <h3>Accelerating Business Performance</h3>
+      <p style="color: #64748b; margin-bottom: 32px; max-width: 800px;">
+        Disconnected content systems and reliance on IT stall campaign launches and make personalization hard. 
+        Contentful brings all content into an API-first hub and gives marketers self-serve tools to build, test, and tailor experiences quickly.
+      </p>
+      <div class="metric-grid">
+        <div class="metric-card highlight">
+          <div class="metric-label">Total Revenue Impact</div>
+          <div class="metric-value">${formatCurrency(revenue.totalLift)}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Time-to-Market Reduction</div>
+          <div class="metric-value">${inputs.timeToMarketReduction}%</div>
+        </div>
+      </div>
+      <div class="breakdown-list">
+        <h3 style="margin-bottom: 16px;">Value Breakdown</h3>
+        <div class="breakdown-item">
+          <span class="label">Conversion Rate Lift</span>
+          <span class="value">${formatCurrency(revenue.conversionLift)}</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="label">Time-to-Market Value</span>
+          <span class="value">${formatCurrency(revenue.timeToMarketValue)}</span>
+        </div>
+      </div>
+      <div class="proof-points">
+        <h4>Customer Success Stories</h4>
+        <ul>
+          <li><strong>Kraft Heinz:</strong> 78% conversion rate increase</li>
+          <li><strong>Ruggable:</strong> 25% higher conversions, 7x click-through rate</li>
+          <li><strong>KFC:</strong> 43% digital sales growth</li>
+        </ul>
+      </div>
+    </div>
+    <div class="page-number">3</div>
+  </div>
+
+  <!-- Operational Efficiency Page -->
+  <div class="page">
+    <img src="${logoUrl}" alt="Contentful" class="logo">
+    <div class="content-area">
+      <h2>Operational Efficiency</h2>
+      <h3>Doing More with Less</h3>
+      <p style="color: #64748b; margin-bottom: 32px; max-width: 800px;">
+        Manual workflows, multiple CMSs, and developer ticket backlogs slow releases and inflate content costs. 
+        A single structured platform with a visual editor lets marketers publish independently while developers focus on higher-value work.
+      </p>
+      <div class="metric-grid">
+        <div class="metric-card highlight">
+          <div class="metric-label">Total Annual Savings</div>
+          <div class="metric-value">${formatCurrency(efficiency.totalSavings)}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Developer Efficiency Gain</div>
+          <div class="metric-value">${inputs.devEfficiencyGain}%</div>
+        </div>
+      </div>
+      <div class="breakdown-list">
+        <h3 style="margin-bottom: 16px;">Savings Breakdown</h3>
+        <div class="breakdown-item">
+          <span class="label">Developer Cost Savings</span>
+          <span class="value">${formatCurrency(efficiency.devCostSavings)}</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="label">CMS Consolidation Savings</span>
+          <span class="value">${formatCurrency(efficiency.cmsConsolidationSavings)}</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="label">Marketing Productivity Gain</span>
+          <span class="value">${formatCurrency(efficiency.marketingProductivityGain)}</span>
+        </div>
+      </div>
+      <div class="proof-points">
+        <h4>Customer Success Stories</h4>
+        <ul>
+          <li><strong>Audible:</strong> 80% decrease in content production time</li>
+          <li><strong>Shiseido:</strong> 50% reduction in content costs</li>
+          <li><strong>Costa Coffee:</strong> 15 sites built in 15 minutes each</li>
+        </ul>
+      </div>
+    </div>
+    <div class="page-number">4</div>
+  </div>
+
+  <!-- Risk Mitigation Page -->
+  <div class="page">
+    <img src="${logoUrl}" alt="Contentful" class="logo">
+    <div class="content-area">
+      <h2>Risk Mitigation</h2>
+      <h3>Reducing Business & Technical Risk</h3>
+      <p style="color: #64748b; margin-bottom: 32px; max-width: 800px;">
+        Legacy stacks expose businesses to outages, traffic-spike failures, and security or compliance gaps. 
+        Contentful's cloud-native architecture delivers high availability, rapid rollback, and strong governance controls.
+      </p>
+      <div class="metric-grid">
+        <div class="metric-card highlight">
+          <div class="metric-label">Total Risk Reduction Value</div>
+          <div class="metric-value">${formatCurrency(risk.totalRiskReduction)}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Downtime Reduction</div>
+          <div class="metric-value">${inputs.downtimeReduction}%</div>
+        </div>
+      </div>
+      <div class="breakdown-list">
+        <h3 style="margin-bottom: 16px;">Risk Reduction Breakdown</h3>
+        <div class="breakdown-item">
+          <span class="label">Downtime Cost Savings</span>
+          <span class="value">${formatCurrency(risk.downtimeSavings)}</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="label">Security Incident Savings</span>
+          <span class="value">${formatCurrency(risk.securitySavings)}</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="label">Compliance Efficiency</span>
+          <span class="value">${formatCurrency(risk.complianceEfficiency)}</span>
+        </div>
+      </div>
+      <div class="proof-points">
+        <h4>Enterprise-Grade Reliability</h4>
+        <ul>
+          <li><strong>Milwaukee Bucks:</strong> 2.9M app opens, zero downtime</li>
+          <li><strong>TELUS:</strong> Consolidated 11 CMS platforms to one</li>
+          <li><strong>Vodafone:</strong> 40% faster pages, zero outages</li>
+          <li>99.99% uptime SLA • ISO 27001 & SOC 2 Type II certified</li>
+        </ul>
+      </div>
+    </div>
+    <div class="page-number">5</div>
+  </div>
+
+  <!-- Customer Experience Page -->
+  <div class="page">
+    <img src="${logoUrl}" alt="Contentful" class="logo">
+    <div class="content-area">
+      <h2>Customer Experience</h2>
+      <h3>Elevating Engagement & Loyalty</h3>
+      <p style="color: #64748b; margin-bottom: 32px; max-width: 800px;">
+        Siloed channels, limited personalization, and sluggish pages erode engagement and push visitors away. 
+        Composable delivery, reusable components, and native personalization create fast, consistent, and relevant journeys across every touchpoint.
+      </p>
+      <div class="metric-grid">
+        <div class="metric-card highlight">
+          <div class="metric-label">Total CX Value</div>
+          <div class="metric-value">${formatCurrency(cx.totalCXValue)}</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Expected CX Improvement</div>
+          <div class="metric-value">${inputs.cxImprovement}%</div>
+        </div>
+      </div>
+      <div class="breakdown-list">
+        <h3 style="margin-bottom: 16px;">CX Value Breakdown</h3>
+        <div class="breakdown-item">
+          <span class="label">Bounce Rate Reduction Impact</span>
+          <span class="value">${formatCurrency(cx.bounceImpact)}</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="label">Engagement Lift Value</span>
+          <span class="value">${formatCurrency(cx.engagementLift)}</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="label">Repeat Customer Value</span>
+          <span class="value">${formatCurrency(cx.repeatCustomerLift)}</span>
+        </div>
+      </div>
+      <div class="proof-points">
+        <h4>Customer Success Stories</h4>
+        <ul>
+          <li><strong>Kraft Heinz:</strong> 30% engagement increase</li>
+          <li><strong>TELUS:</strong> 14% conversion uplift, 30% faster page loads</li>
+          <li><strong>BMW:</strong> 47% increase in test-drive bookings</li>
+        </ul>
+      </div>
+    </div>
+    <div class="page-number">6</div>
+  </div>
+
+  <!-- Investment & ROI Page -->
+  <div class="page">
+    <img src="${logoUrl}" alt="Contentful" class="logo">
+    <div class="content-area">
+      <h2>Investment & ROI Summary</h2>
+      <div class="metric-grid">
+        <div class="metric-card highlight">
+          <div class="metric-label">3-Year Net Benefit</div>
+          <div class="metric-value">${formatCurrency(netBenefit)}</div>
+        </div>
+        <div class="metric-card highlight">
+          <div class="metric-label">Return on Investment</div>
+          <div class="metric-value">${roi.toFixed(0)}%</div>
+        </div>
+      </div>
+      <div class="investment-table">
+        <h3 style="margin-bottom: 24px;">Investment Details</h3>
+        <div class="investment-row">
+          <span>Implementation Cost</span>
+          <span>${formatCurrency(inputs.implementationCost)}</span>
+        </div>
+        <div class="investment-row">
+          <span>Annual License Cost (x3 years)</span>
+          <span>${formatCurrency(inputs.annualLicenseCost * 3)}</span>
+        </div>
+        <div class="investment-row total">
+          <span>Total 3-Year Investment</span>
+          <span>${formatCurrency(totalCost)}</span>
+        </div>
+      </div>
+      <div style="margin-top: 32px;">
+        <div class="investment-table">
+          <h3 style="margin-bottom: 24px;">Benefits Summary</h3>
+          <div class="investment-row">
+            <span>Annual Total Benefit</span>
+            <span>${formatCurrency(totalAnnualBenefit)}</span>
+          </div>
+          <div class="investment-row">
+            <span>3-Year Total Benefit</span>
+            <span>${formatCurrency(threeYearBenefit)}</span>
+          </div>
+          <div class="investment-row total" style="color: #059669;">
+            <span>3-Year Net Benefit</span>
+            <span>${formatCurrency(netBenefit)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="cta-section">
+        <h3>Ready to Transform Your Content Operations?</h3>
+        <p>Contact Contentful to discuss how we can help you achieve these results for your organization.</p>
+      </div>
+    </div>
+    <div class="page-number">7</div>
+  </div>
+</body>
+</html>
+    `;
+
+    const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'contentful-business-case.html');
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -342,13 +914,20 @@ export default function App() {
           </p>
         </div>
 
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center gap-4">
           <button
             onClick={exportToCSV}
             className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg transition-all hover:shadow-xl"
           >
             <Download className="w-5 h-5" />
             Export Inputs to CSV
+          </button>
+          <button
+            onClick={generatePresentation}
+            className="flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-lg transition-all hover:shadow-xl"
+          >
+            <Presentation className="w-5 h-5" />
+            Generate Business Case
           </button>
         </div>
       </div>
