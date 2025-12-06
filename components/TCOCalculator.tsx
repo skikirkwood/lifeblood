@@ -222,8 +222,10 @@ export default function App() {
     }
     
     .logo {
+      position: absolute;
+      bottom: 40px;
+      right: 60px;
       height: 32px;
-      margin-bottom: 40px;
     }
     
     .eyebrow {
