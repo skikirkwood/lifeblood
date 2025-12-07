@@ -279,9 +279,11 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result as string;
-      const lines = text.split('\n').filter(line => line.trim());
+      // Handle both Windows (\r\n) and Unix (\n) line endings
+      const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').filter(line => line.trim());
       
-      const newInputs = { ...inputs };
+      // Parse CSV into updates object
+      const updates: Record<string, number> = {};
       
       // Skip header row, parse each data row
       for (let i = 1; i < lines.length; i++) {
@@ -293,13 +295,17 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           if (key && valueStr) {
             const value = parseFloat(valueStr);
             if (!isNaN(value)) {
-              newInputs[key] = value;
+              updates[key] = value;
             }
           }
         }
       }
       
-      setInputs(newInputs);
+      // Use functional update to ensure we get latest state
+      setInputs(prevInputs => ({
+        ...prevInputs,
+        ...updates
+      }));
     };
     
     reader.readAsText(file);
