@@ -247,32 +247,33 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Map labels to keys (lowercase for case-insensitive matching)
     const labelToKey: Record<string, string> = {
-      'Monthly Website Visitors': 'monthlyVisitors',
-      'Current Conversion Rate (%)': 'currentConversionRate',
-      'Avg Revenue per Conversion ($)': 'avgRevenuePerConversion',
-      'Campaign Launch Time (Days)': 'campaignLaunchTime',
-      'Developer Hourly Rate ($)': 'developerHourlyRate',
-      'Monthly Dev Hours on Content': 'monthlyDevHoursOnContent',
-      'Number of CMS Systems': 'numberOfCMS',
-      'Annual CMS Maintenance Cost ($)': 'cmsMaintenanceCostPerYear',
-      'Marketing Team Size': 'marketingTeamSize',
-      'Downtime Hours per Year': 'downtimeHoursPerYear',
-      'Hourly Revenue Loss ($)': 'hourlyRevenueLoss',
-      'Annual Compliance Audit Cost ($)': 'complianceAuditCost',
-      'Security Incidents per Year': 'securityIncidentsPerYear',
-      'Cost per Security Incident ($)': 'incidentCost',
-      'Current Bounce Rate (%)': 'currentBounceRate',
-      'Avg Session Duration (min)': 'avgSessionDuration',
-      'Customer Satisfaction Score (%)': 'customerSatisfactionScore',
-      'Repeat Customer Rate (%)': 'repeatCustomerRate',
-      'Implementation Cost ($)': 'implementationCost',
-      'Annual License Cost ($)': 'annualLicenseCost',
-      'Expected Conversion Increase (%)': 'conversionRateIncrease',
-      'Time-to-Market Reduction (%)': 'timeToMarketReduction',
-      'Developer Efficiency Gain (%)': 'devEfficiencyGain',
-      'Downtime Reduction (%)': 'downtimeReduction',
-      'Expected CX Improvement (%)': 'cxImprovement'
+      'monthly website visitors': 'monthlyVisitors',
+      'current conversion rate (%)': 'currentConversionRate',
+      'avg revenue per conversion ($)': 'avgRevenuePerConversion',
+      'campaign launch time (days)': 'campaignLaunchTime',
+      'developer hourly rate ($)': 'developerHourlyRate',
+      'monthly dev hours on content': 'monthlyDevHoursOnContent',
+      'number of cms systems': 'numberOfCMS',
+      'annual cms maintenance cost ($)': 'cmsMaintenanceCostPerYear',
+      'marketing team size': 'marketingTeamSize',
+      'downtime hours per year': 'downtimeHoursPerYear',
+      'hourly revenue loss ($)': 'hourlyRevenueLoss',
+      'annual compliance audit cost ($)': 'complianceAuditCost',
+      'security incidents per year': 'securityIncidentsPerYear',
+      'cost per security incident ($)': 'incidentCost',
+      'current bounce rate (%)': 'currentBounceRate',
+      'avg session duration (min)': 'avgSessionDuration',
+      'customer satisfaction score (%)': 'customerSatisfactionScore',
+      'repeat customer rate (%)': 'repeatCustomerRate',
+      'implementation cost ($)': 'implementationCost',
+      'annual license cost ($)': 'annualLicenseCost',
+      'expected conversion increase (%)': 'conversionRateIncrease',
+      'time-to-market reduction (%)': 'timeToMarketReduction',
+      'developer efficiency gain (%)': 'devEfficiencyGain',
+      'downtime reduction (%)': 'downtimeReduction',
+      'expected cx improvement (%)': 'cxImprovement'
     };
 
     const reader = new FileReader();
@@ -284,12 +285,16 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       
       // Skip header row, parse each data row
       for (let i = 1; i < lines.length; i++) {
-        const [label, valueStr] = lines[i].split(',').map(s => s.trim());
-        const key = labelToKey[label];
-        if (key && valueStr) {
-          const value = parseFloat(valueStr);
-          if (!isNaN(value)) {
-            newInputs[key] = value;
+        const parts = lines[i].split(',');
+        if (parts.length >= 2) {
+          const label = parts[0].trim().toLowerCase();
+          const valueStr = parts[1].trim();
+          const key = labelToKey[label];
+          if (key && valueStr) {
+            const value = parseFloat(valueStr);
+            if (!isNaN(value)) {
+              newInputs[key] = value;
+            }
           }
         }
       }
