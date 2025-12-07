@@ -278,16 +278,46 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
 
     const reader = new FileReader();
     reader.onload = (e) => {
-      const text = e.target?.result as string;
+      let text = e.target?.result as string;
+      
+      // Remove BOM if present
+      if (text.charCodeAt(0) === 0xFEFF) {
+        text = text.slice(1);
+      }
+      
       // Handle both Windows (\r\n) and Unix (\n) line endings
       const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').filter(line => line.trim());
       
       // Parse CSV into updates object
       const updates: Record<string, number> = {};
+      const imported: string[] = [];
       
       // Skip header row, parse each data row
       for (let i = 1; i < lines.length; i++) {
-        const parts = lines[i].split(',');
+        // Handle quoted CSV values
+        const line = lines[i];
+        let parts: string[];
+        
+        // Simple CSV parsing that handles quotes
+        if (line.includes('"')) {
+          parts = [];
+          let current = '';
+          let inQuotes = false;
+          for (const char of line) {
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              parts.push(current);
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          parts.push(current);
+        } else {
+          parts = line.split(',');
+        }
+        
         if (parts.length >= 2) {
           const label = parts[0].trim().toLowerCase();
           const valueStr = parts[1].trim();
@@ -296,16 +326,22 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
             const value = parseFloat(valueStr);
             if (!isNaN(value)) {
               updates[key] = value;
+              imported.push(`${parts[0].trim()}: ${value}`);
             }
           }
         }
       }
       
-      // Use functional update to ensure we get latest state
-      setInputs(prevInputs => ({
-        ...prevInputs,
-        ...updates
-      }));
+      if (Object.keys(updates).length > 0) {
+        // Use functional update to ensure we get latest state
+        setInputs(prevInputs => ({
+          ...prevInputs,
+          ...updates
+        }));
+        alert(`Successfully imported ${Object.keys(updates).length} values:\n\n${imported.slice(0, 5).join('\n')}${imported.length > 5 ? `\n...and ${imported.length - 5} more` : ''}`);
+      } else {
+        alert('No valid values found in CSV. Please ensure the file has the format:\nInput Parameter,Value\nMonthly Website Visitors,300000');
+      }
     };
     
     reader.readAsText(file);
