@@ -1169,22 +1169,22 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="driver-cards">
             ${enabledDrivers.includes('revenue') ? `<div class="driver-card green">
               <div class="icon">📈</div>
-              <div class="name">Revenue</div>
+              <div class="name">Revenue Growth</div>
               <div class="amount">${formatCurrency(revenue.totalLift)}</div>
             </div>` : ''}
             ${enabledDrivers.includes('efficiency') ? `<div class="driver-card blue">
               <div class="icon">⚡</div>
-              <div class="name">Efficiency</div>
+              <div class="name">Operational Efficiency</div>
               <div class="amount">${formatCurrency(efficiency.totalSavings)}</div>
             </div>` : ''}
             ${enabledDrivers.includes('risk') ? `<div class="driver-card orange">
               <div class="icon">🛡️</div>
-              <div class="name">Risk</div>
+              <div class="name">Risk Mitigation</div>
               <div class="amount">${formatCurrency(risk.totalRiskReduction)}</div>
             </div>` : ''}
             ${enabledDrivers.includes('cx') ? `<div class="driver-card yellow">
               <div class="icon">👥</div>
-              <div class="name">CX</div>
+              <div class="name">Customer Experience</div>
               <div class="amount">${formatCurrency(cx.totalCXValue)}</div>
             </div>` : ''}
           </div>
@@ -1222,10 +1222,10 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
               }).join('')}
             </div>
             <div class="chart-legend">
-              ${enabledDrivers.includes('revenue') ? `<div class="legend-item"><div class="legend-dot revenue"></div>Revenue</div>` : ''}
-              ${enabledDrivers.includes('efficiency') ? `<div class="legend-item"><div class="legend-dot efficiency"></div>Efficiency</div>` : ''}
-              ${enabledDrivers.includes('risk') ? `<div class="legend-item"><div class="legend-dot risk"></div>Risk</div>` : ''}
-              ${enabledDrivers.includes('cx') ? `<div class="legend-item"><div class="legend-dot cx"></div>CX</div>` : ''}
+              ${enabledDrivers.includes('revenue') ? `<div class="legend-item"><div class="legend-dot revenue"></div>Revenue Growth</div>` : ''}
+              ${enabledDrivers.includes('efficiency') ? `<div class="legend-item"><div class="legend-dot efficiency"></div>Operational Efficiency</div>` : ''}
+              ${enabledDrivers.includes('risk') ? `<div class="legend-item"><div class="legend-dot risk"></div>Risk Mitigation</div>` : ''}
+              ${enabledDrivers.includes('cx') ? `<div class="legend-item"><div class="legend-dot cx"></div>Customer Experience</div>` : ''}
             </div>
           </div>
         </div>
