@@ -38,7 +38,7 @@ const modelConfigs = {
       timeToMarketReduction: 65,
       devEfficiencyGain: 45,
       downtimeReduction: 85,
-      cxImprovement: 30
+      cxImprovement: 10
     }
   },
   ecommerce: {
@@ -70,7 +70,7 @@ const modelConfigs = {
       timeToMarketReduction: 70,
       devEfficiencyGain: 55,
       downtimeReduction: 95,
-      cxImprovement: 20
+      cxImprovement: 10
     }
   },
   knowledge: {
@@ -102,7 +102,7 @@ const modelConfigs = {
       timeToMarketReduction: 50,
       devEfficiencyGain: 60,
       downtimeReduction: 80,
-      cxImprovement: 35
+      cxImprovement: 10
     }
   }
 };
@@ -324,7 +324,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     const baseRevenue = inputs.monthlyVisitors * 12 * (inputs.currentConversionRate / 100) * inputs.avgRevenuePerConversion;
     const bounceReduction = (inputs.currentBounceRate * inputs.bounceRateReduction / 100) / 100;
     const bounceImpact = baseRevenue * bounceReduction;
-    const engagementLift = baseRevenue * (inputs.cxImprovement / 100);
+    const engagementLift = baseRevenue * (inputs.cxImprovement / 100) * 0.5;
     const repeatCustomerLift = baseRevenue * (inputs.repeatCustomerRateIncrease / 100) * 0.5;
     return {
       bounceImpact,
@@ -1935,7 +1935,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                   <SliderInput label="Current Bounce Rate" value={inputs.currentBounceRate} onChange={(val) => handleInputChange('currentBounceRate', val)} min={20} max={80} step={1} suffix="%" />
                   <SliderInput label="Expected Bounce Rate Reduction" value={inputs.bounceRateReduction} onChange={(val) => handleInputChange('bounceRateReduction', val)} min={10} max={50} step={5} suffix="%" helper="Percentage reduction in bounce rate" />
                   <SliderInput label="Repeat Customer Rate Increase" value={inputs.repeatCustomerRateIncrease} onChange={(val) => handleInputChange('repeatCustomerRateIncrease', val)} min={0} max={20} step={1} suffix="%" helper="Expected increase in repeat customers" />
-                  <div className="border-t pt-4"><SliderInput label="Expected CX Improvement" value={inputs.cxImprovement} onChange={(val) => handleInputChange('cxImprovement', val)} min={15} max={50} step={5} suffix="%" helper="Engagement lift" /></div>
+                  <div className="border-t pt-4"><SliderInput label="Expected CX Improvement" value={inputs.cxImprovement} onChange={(val) => handleInputChange('cxImprovement', val)} min={5} max={50} step={5} suffix="%" helper="Engagement lift (dampened by 0.5x)" /></div>
                 </>
               )}
 
