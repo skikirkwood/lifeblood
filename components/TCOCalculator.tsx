@@ -30,7 +30,7 @@ const modelConfigs = {
       currentBounceRate: 55,
       avgSessionDuration: 2.5,
       customerSatisfactionScore: 65,
-      repeatCustomerRate: 25,
+      repeatCustomerRateIncrease: 10,
       implementationCost: 125000,
       annualLicenseCost: 60000,
       conversionRateIncrease: 15,
@@ -61,7 +61,7 @@ const modelConfigs = {
       currentBounceRate: 40,
       avgSessionDuration: 4.0,
       customerSatisfactionScore: 72,
-      repeatCustomerRate: 35,
+      repeatCustomerRateIncrease: 10,
       implementationCost: 200000,
       annualLicenseCost: 100000,
       conversionRateIncrease: 25,
@@ -92,7 +92,7 @@ const modelConfigs = {
       currentBounceRate: 35,
       avgSessionDuration: 5.0,
       customerSatisfactionScore: 60,
-      repeatCustomerRate: 45,
+      repeatCustomerRateIncrease: 10,
       implementationCost: 100000,
       annualLicenseCost: 50000,
       conversionRateIncrease: 5,
@@ -287,7 +287,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     const bounceReduction = (inputs.currentBounceRate * 0.3) / 100;
     const bounceImpact = baseRevenue * bounceReduction;
     const engagementLift = baseRevenue * (inputs.cxImprovement / 100);
-    const repeatCustomerLift = baseRevenue * (inputs.repeatCustomerRate / 100) * 0.4;
+    const repeatCustomerLift = baseRevenue * (inputs.repeatCustomerRateIncrease / 100) * 0.5;
     return {
       bounceImpact,
       engagementLift,
@@ -340,7 +340,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       currentBounceRate: 'Current Bounce Rate (%)',
       avgSessionDuration: 'Avg Session Duration (min)',
       customerSatisfactionScore: 'Customer Satisfaction Score (%)',
-      repeatCustomerRate: 'Repeat Customer Rate (%)',
+      repeatCustomerRateIncrease: 'Repeat Customer Rate Increase (%)',
       implementationCost: 'Implementation Cost ($)',
       annualLicenseCost: 'Annual License Cost ($)',
       conversionRateIncrease: 'Expected Conversion Increase (%)',
@@ -391,7 +391,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       'current bounce rate (%)': 'currentBounceRate',
       'avg session duration (min)': 'avgSessionDuration',
       'customer satisfaction score (%)': 'customerSatisfactionScore',
-      'repeat customer rate (%)': 'repeatCustomerRate',
+      'repeat customer rate increase (%)': 'repeatCustomerRateIncrease',
       'implementation cost ($)': 'implementationCost',
       'annual license cost ($)': 'annualLicenseCost',
       'expected conversion increase (%)': 'conversionRateIncrease',
@@ -1894,7 +1894,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                   <SliderInput label="Current Bounce Rate" value={inputs.currentBounceRate} onChange={(val) => handleInputChange('currentBounceRate', val)} min={20} max={80} step={1} suffix="%" />
                   <SliderInput label="Avg Session Duration (min)" value={inputs.avgSessionDuration} onChange={(val) => handleInputChange('avgSessionDuration', val)} min={1} max={15} step={0.5} />
                   <SliderInput label="Customer Satisfaction Score" value={inputs.customerSatisfactionScore} onChange={(val) => handleInputChange('customerSatisfactionScore', val)} min={40} max={95} step={1} suffix="%" />
-                  <SliderInput label="Repeat Customer Rate" value={inputs.repeatCustomerRate} onChange={(val) => handleInputChange('repeatCustomerRate', val)} min={10} max={70} step={1} suffix="%" />
+                  <SliderInput label="Repeat Customer Rate Increase" value={inputs.repeatCustomerRateIncrease} onChange={(val) => handleInputChange('repeatCustomerRateIncrease', val)} min={0} max={20} step={1} suffix="%" helper="Expected increase in repeat customers" />
                   <div className="border-t pt-4"><SliderInput label="Expected CX Improvement" value={inputs.cxImprovement} onChange={(val) => handleInputChange('cxImprovement', val)} min={15} max={50} step={5} suffix="%" helper="Engagement lift" /></div>
                 </>
               )}
