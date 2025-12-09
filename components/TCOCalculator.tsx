@@ -1827,9 +1827,6 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                   <X className="w-6 h-6" />
                 </button>
               </div>
-              <p className="text-sm text-gray-600 mt-2">
-                Enter a company name to auto-fill calculator inputs with estimated company data.
-              </p>
             </div>
 
             <div className="p-6 space-y-6">
@@ -1866,6 +1863,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
               </div>
 
               <div className="border-t border-gray-200 pt-6">
+                <p className="text-sm text-gray-600 mb-4">
+                  Enter a company name to auto-fill calculator inputs with estimated company data.
+                </p>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Prospect Company Name
                 </label>
