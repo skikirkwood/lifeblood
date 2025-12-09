@@ -124,6 +124,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   const [isDirty, setIsDirty] = useState(false);
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+  const [roiYears, setRoiYears] = useState<3 | 5>(3);
 
   // Track unsaved changes and warn on page unload
   useEffect(() => {
@@ -305,10 +306,11 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     (config.enabledDrivers.includes('efficiency') ? efficiency.totalSavings : 0) + 
     (config.enabledDrivers.includes('risk') ? risk.totalRiskReduction : 0) + 
     (config.enabledDrivers.includes('cx') ? cx.totalCXValue : 0);
-  const fiveYearBenefit = totalAnnualBenefit * 5;
-  const totalCost = inputs.implementationCost + (inputs.annualLicenseCost * 5);
-  const netBenefit = fiveYearBenefit - totalCost;
+  const multiYearBenefit = totalAnnualBenefit * roiYears;
+  const totalCost = inputs.implementationCost + (inputs.annualLicenseCost * roiYears);
+  const netBenefit = multiYearBenefit - totalCost;
   const roi = ((netBenefit / totalCost) * 100);
+  const roiLabel = `${roiYears}-Year`;
   const paybackMonths = (inputs.implementationCost / (totalAnnualBenefit / 12));
 
   const formatCurrency = (num) => {
@@ -1043,12 +1045,12 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
         <div class="content-left">
           <div class="eyebrow">Executive Summary</div>
           <h2>Total Business Impact</h2>
-          <p class="subtitle">5-year projected value from Contentful implementation</p>
+          <p class="subtitle">${roiYears}-year projected value from Contentful implementation</p>
           
           <div class="summary-grid">
             <div class="summary-card highlight">
-              <div class="label">5-Year Total Benefit</div>
-              <div class="value">${formatCurrency(fiveYearBenefit)}</div>
+              <div class="label">${roiYears}-Year Total Benefit</div>
+              <div class="value">${formatCurrency(multiYearBenefit)}</div>
             </div>
             <div class="summary-card highlight">
               <div class="label">Return on Investment</div>
@@ -1091,7 +1093,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="stats-sidebar">
             <div class="stat-item">
               <div class="stat-value">${roi.toFixed(0)}%</div>
-              <div class="stat-label">5-Year ROI</div>
+              <div class="stat-label">${roiYears}-Year ROI</div>
               <div class="stat-desc">Return on total investment including implementation and licensing</div>
             </div>
             <div class="stat-item">
@@ -1102,7 +1104,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
             <div class="stat-item">
               <div class="stat-value">${formatCurrency(netBenefit)}</div>
               <div class="stat-label">Net Benefit</div>
-              <div class="stat-desc">Total 5-year benefit minus all costs</div>
+              <div class="stat-desc">Total ${roiYears}-year benefit minus all costs</div>
             </div>
           </div>
         </div>
@@ -1386,7 +1388,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
         <div class="content-left">
           <div class="eyebrow">Investment Summary</div>
           <h2>Investment & ROI</h2>
-          <p class="subtitle">Comprehensive 5-year financial analysis</p>
+          <p class="subtitle">Comprehensive ${roiYears}-year financial analysis</p>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0;">
             <div class="breakdown-section">
@@ -1396,8 +1398,8 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                 <span class="value">${formatCurrency(inputs.implementationCost)}</span>
               </div>
               <div class="breakdown-row">
-                <span class="label">License (5 years)</span>
-                <span class="value">${formatCurrency(inputs.annualLicenseCost * 5)}</span>
+                <span class="label">License (${roiYears} years)</span>
+                <span class="value">${formatCurrency(inputs.annualLicenseCost * roiYears)}</span>
               </div>
               <div class="breakdown-row total">
                 <span class="label">Total Investment</span>
@@ -1412,8 +1414,8 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                 <span class="value">${formatCurrency(totalAnnualBenefit)}</span>
               </div>
               <div class="breakdown-row">
-                <span class="label">5-Year Benefit</span>
-                <span class="value">${formatCurrency(fiveYearBenefit)}</span>
+                <span class="label">${roiYears}-Year Benefit</span>
+                <span class="value">${formatCurrency(multiYearBenefit)}</span>
               </div>
               <div class="breakdown-row total">
                 <span class="label">Net Benefit</span>
@@ -1431,7 +1433,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="stats-sidebar">
             <div class="stat-item">
               <div class="stat-value">${roi.toFixed(0)}%</div>
-              <div class="stat-label">5-Year ROI</div>
+              <div class="stat-label">${roiYears}-Year ROI</div>
               <div class="stat-desc">Return on total investment</div>
             </div>
             <div class="stat-item">
@@ -1605,13 +1607,18 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Change Model</span>
           </button>
-          <button
-            onClick={() => setShowConfigureModal(true)}
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            <Settings className="w-4 h-4" />
-            <span className="text-sm font-medium">Configure</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+              {roiYears}-Year Model
+            </span>
+            <button
+              onClick={() => setShowConfigureModal(true)}
+              className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              <Settings className="w-4 h-4" />
+              <span className="text-sm font-medium">Configure</span>
+            </button>
+          </div>
         </div>
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Contentful Value ROI Calculator</h1>
@@ -1724,8 +1731,8 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
               <h2 className="text-xl md:text-2xl font-bold mb-6">Total Business Impact</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Annual Benefit</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(totalAnnualBenefit)}</div></div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">5-Year Benefit</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(fiveYearBenefit)}</div></div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">ROI (5 Years)</div><div className="text-xl md:text-2xl font-bold">{roi.toFixed(0)}%</div></div>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">{roiYears}-Year Benefit</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(multiYearBenefit)}</div></div>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">ROI ({roiYears} Years)</div><div className="text-xl md:text-2xl font-bold">{roi.toFixed(0)}%</div></div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Payback Period</div><div className="text-xl md:text-2xl font-bold">{paybackMonths.toFixed(1)} months</div></div>
               </div>
             </div>
@@ -1826,7 +1833,39 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
             </div>
 
             <div className="p-6 space-y-6">
+              {/* ROI Period Toggle */}
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  ROI Calculation Period
+                </label>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setRoiYears(3)}
+                    className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all ${
+                      roiYears === 3
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    3 Years
+                  </button>
+                  <button
+                    onClick={() => setRoiYears(5)}
+                    className={`flex-1 px-4 py-3 rounded-lg font-medium transition-all ${
+                      roiYears === 5
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    5 Years
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Choose the time horizon for ROI calculations and business case projections.
+                </p>
+              </div>
+
+              <div className="border-t border-gray-200 pt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Prospect Company Name
                 </label>
