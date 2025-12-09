@@ -31,6 +31,7 @@ const modelConfigs = {
       avgSessionDuration: 2.5,
       repeatCustomerRateIncrease: 10,
       implementationCost: 125000,
+      implementationTime: 6,
       annualLicenseCost: 60000,
       conversionRateIncrease: 15,
       timeToMarketReduction: 65,
@@ -61,6 +62,7 @@ const modelConfigs = {
       avgSessionDuration: 4.0,
       repeatCustomerRateIncrease: 10,
       implementationCost: 200000,
+      implementationTime: 9,
       annualLicenseCost: 100000,
       conversionRateIncrease: 25,
       timeToMarketReduction: 70,
@@ -91,6 +93,7 @@ const modelConfigs = {
       avgSessionDuration: 5.0,
       repeatCustomerRateIncrease: 10,
       implementationCost: 100000,
+      implementationTime: 4,
       annualLicenseCost: 50000,
       conversionRateIncrease: 5,
       timeToMarketReduction: 50,
@@ -308,7 +311,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   const netBenefit = multiYearBenefit - totalCost;
   const roi = ((netBenefit / totalCost) * 100);
   const roiLabel = `${roiYears}-Year`;
-  const paybackMonths = (inputs.implementationCost / (totalAnnualBenefit / 12));
+  const paybackMonths = inputs.implementationTime + (inputs.implementationCost / (totalAnnualBenefit / 12));
 
   const formatCurrency = (num) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
@@ -338,6 +341,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       avgSessionDuration: 'Avg Session Duration (min)',
       repeatCustomerRateIncrease: 'Repeat Customer Rate Increase (%)',
       implementationCost: 'Implementation Cost ($)',
+      implementationTime: 'Implementation Time (Months)',
       annualLicenseCost: 'Annual License Cost ($)',
       conversionRateIncrease: 'Expected Conversion Increase (%)',
       timeToMarketReduction: 'Time-to-Market Reduction (%)',
@@ -388,6 +392,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       'avg session duration (min)': 'avgSessionDuration',
       'repeat customer rate increase (%)': 'repeatCustomerRateIncrease',
       'implementation cost ($)': 'implementationCost',
+      'implementation time (months)': 'implementationTime',
       'annual license cost ($)': 'annualLicenseCost',
       'expected conversion increase (%)': 'conversionRateIncrease',
       'time-to-market reduction (%)': 'timeToMarketReduction',
@@ -1897,6 +1902,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                 <h3 className="font-semibold text-gray-900 mb-4">Investment</h3>
                 <div className="space-y-4">
                   <SliderInput label="Implementation Cost" value={inputs.implementationCost} onChange={(val) => handleInputChange('implementationCost', val)} min={50000} max={500000} step={10000} prefix="$" />
+                  <SliderInput label="Implementation Time" value={inputs.implementationTime} onChange={(val) => handleInputChange('implementationTime', val)} min={1} max={18} step={1} suffix=" months" helper="Time before benefits begin" />
                   <SliderInput label="Annual License Cost" value={inputs.annualLicenseCost} onChange={(val) => handleInputChange('annualLicenseCost', val)} min={25000} max={200000} step={5000} prefix="$" />
                 </div>
               </div>
