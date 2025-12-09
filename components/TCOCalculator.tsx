@@ -535,11 +535,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     }
     
     .logo {
-      position: absolute;
-      bottom: 40px;
-      right: 380px;
-      height: 32px;
-      z-index: 50;
+      height: 24px;
     }
     
     .eyebrow {
@@ -699,6 +695,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     
     /* Footer */
     .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 13px;
       color: #888;
       padding-top: 20px;
@@ -1101,7 +1100,6 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   <div class="slideshow">
     <!-- Slide 1: Title -->
     <div class="slide active" data-slide="0" style="position: relative;">
-      <img src="${logoUrl}" alt="Contentful" class="logo">
       <div class="title-content">
         <div class="eyebrow">${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
         <h1>Business Case<br>for Contentful</h1>
@@ -1138,12 +1136,11 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
         <div class="geo-shape geo-pill bg-yellow" style="grid-column: span 2;"></div>
       </div>
       
-      <div class="slide-footer" style="margin-top: auto;">© 2025 Contentful</div>
+      <div class="slide-footer" style="margin-top: auto;"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
     </div>
 
     <!-- Slide 2: Executive Summary -->
     <div class="slide" data-slide="1">
-      <img src="${logoUrl}" alt="Contentful" class="logo">
       <div class="slide-content">
         <div class="content-left">
           <div class="eyebrow">Executive Summary</div>
@@ -1252,14 +1249,13 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer">© 2025 Contentful</div>
+      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
     </div>
 
     <!-- Value Driver Slides (conditionally rendered) -->
     ${enabledDrivers.includes('revenue') ? `
     <!-- Revenue Growth -->
     <div class="slide" data-slide="${2 + enabledDrivers.indexOf('revenue')}">
-      <img src="${logoUrl}" alt="Contentful" class="logo">
       <div class="slide-content">
         <div class="content-left">
           <div class="eyebrow">Revenue Growth</div>
@@ -1316,14 +1312,13 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer">© 2025 Contentful</div>
+      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
     </div>
     ` : ''}
 
     ${enabledDrivers.includes('efficiency') ? `
     <!-- Operational Efficiency -->
     <div class="slide" data-slide="${2 + enabledDrivers.indexOf('efficiency')}">
-      <img src="${logoUrl}" alt="Contentful" class="logo">
       <div class="slide-content">
         <div class="content-left">
           <div class="eyebrow">Operational Efficiency</div>
@@ -1384,14 +1379,13 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer">© 2025 Contentful</div>
+      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
     </div>
     ` : ''}
 
     ${enabledDrivers.includes('risk') ? `
     <!-- Risk Mitigation -->
     <div class="slide" data-slide="${2 + enabledDrivers.indexOf('risk')}">
-      <img src="${logoUrl}" alt="Contentful" class="logo">
       <div class="slide-content">
         <div class="content-left">
           <div class="eyebrow">Risk Mitigation</div>
@@ -1452,14 +1446,13 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer">© 2025 Contentful</div>
+      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
     </div>
     ` : ''}
 
     ${enabledDrivers.includes('cx') ? `
     <!-- Customer Experience -->
     <div class="slide" data-slide="${2 + enabledDrivers.indexOf('cx')}">
-      <img src="${logoUrl}" alt="Contentful" class="logo">
       <div class="slide-content">
         <div class="content-left">
           <div class="eyebrow">Customer Experience</div>
@@ -1520,13 +1513,12 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer">© 2025 Contentful</div>
+      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
     </div>
     ` : ''}
 
     <!-- Investment & ROI -->
     <div class="slide" data-slide="${2 + enabledDrivers.length}">
-      <img src="${logoUrl}" alt="Contentful" class="logo">
       <div class="slide-content">
         <div class="content-left">
           <div class="eyebrow">Investment Summary</div>
@@ -1592,7 +1584,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer">© 2025 Contentful</div>
+      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
     </div>
 
     <!-- Navigation Controls -->
