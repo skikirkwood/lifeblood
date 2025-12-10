@@ -128,6 +128,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   const [showUnsavedModal, setShowUnsavedModal] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
   const [roiYears, setRoiYears] = useState<3 | 5>(3);
+  const [attributionPercent, setAttributionPercent] = useState(50);
 
   const STORAGE_KEY = `tco-calculator-${model}`;
 
@@ -339,11 +340,14 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   const risk = calculateRiskImpact();
   const cx = calculateCXImpact();
 
+  // Apply attribution factor to revenue and CX benefits for marketing model
+  const attributionFactor = model === 'marketing' ? (attributionPercent / 100) : 1;
+  
   const totalAnnualBenefit = 
-    (config.enabledDrivers.includes('revenue') ? revenue.totalLift : 0) + 
+    (config.enabledDrivers.includes('revenue') ? revenue.totalLift * attributionFactor : 0) + 
     (config.enabledDrivers.includes('efficiency') ? efficiency.totalSavings : 0) + 
     (config.enabledDrivers.includes('risk') ? risk.totalRiskReduction : 0) + 
-    (config.enabledDrivers.includes('cx') ? cx.totalCXValue : 0);
+    (config.enabledDrivers.includes('cx') ? cx.totalCXValue * attributionFactor : 0);
   const multiYearBenefit = totalAnnualBenefit * roiYears;
   const totalCost = inputs.implementationCost + (inputs.annualLicenseCost * roiYears);
   const netBenefit = multiYearBenefit - totalCost;
@@ -1947,6 +1951,23 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                   <SliderInput label="Annual License Cost" value={inputs.annualLicenseCost} onChange={(val) => handleInputChange('annualLicenseCost', val)} min={25000} max={200000} step={5000} prefix="$" />
                 </div>
               </div>
+
+              {model === 'marketing' && (
+                <div className="border-t pt-6 mt-6">
+                  <h3 className="font-semibold text-gray-900 mb-2">Benefit Attribution</h3>
+                  <p className="text-xs text-gray-500 mb-4">Reduce the calculated revenue and CX benefits to account for partial attribution to Contentful</p>
+                  <SliderInput 
+                    label="Attribution Factor" 
+                    value={attributionPercent} 
+                    onChange={(val) => setAttributionPercent(val)} 
+                    min={0} 
+                    max={100} 
+                    step={5} 
+                    suffix="%" 
+                    helper="Percentage of benefits attributable to Contentful" 
+                  />
+                </div>
+              )}
             </div>
           </div>
 
