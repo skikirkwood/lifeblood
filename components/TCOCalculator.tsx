@@ -8,14 +8,16 @@ interface TCOCalculatorProps {
   onBack: () => void;
 }
 
+// Fixed constant: average donation volume in litres
+const AVERAGE_DONATION_VOLUME_LITRES = 0.5;
+
 const modelConfigs = {
   lifeblood: {
     name: 'Lifeblood Digital Transformation',
     enabledDrivers: ['donations', 'tco'],
     defaults: {
       // Blood Donation Volume
-      currentAnnualDonations: 1400000,
-      averageDonationValue: 450,
+      currentAnnualDonations: 1500000,
       donationIncreasePercent: 8,
       donorRetentionImprovement: 12,
       newDonorAcquisitionIncrease: 15,
@@ -32,9 +34,9 @@ const modelConfigs = {
       
       // Contentful Investment
       contentfulLicenseCostPerYear: 150000,
-      contentfulImplementationCost: 400000,
+      contentfulImplementationCost: 150000,
       contentfulMaintenanceCostPerYear: 50000,
-      implementationTime: 12,
+      implementationTime: 6,
       
       // Legacy fields for compatibility
       monthlyVisitors: 500000,
@@ -55,8 +57,8 @@ const modelConfigs = {
       currentBounceRate: 40,
       bounceRateReduction: 25,
       repeatCustomerRateIncrease: 12,
-      implementationCost: 400000,
-      annualLicenseCost: 200000,
+      implementationCost: 150000,
+      annualLicenseCost: 150000,
       conversionRateIncrease: 15,
       timeToMarketReduction: 60,
       devEfficiencyGain: 70,
@@ -341,20 +343,32 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     };
   };
 
-  // Calculate Blood Donation Value Impact
+  // Calculate Blood Donation Volume Impact (in litres)
   const calculateDonationsImpact = () => {
-    const currentDonationValue = inputs.currentAnnualDonations * inputs.averageDonationValue;
+    const currentAnnualVolumeLitres = inputs.currentAnnualDonations * AVERAGE_DONATION_VOLUME_LITRES;
     const additionalDonationsFromRetention = inputs.currentAnnualDonations * (inputs.donorRetentionImprovement / 100);
     const additionalDonationsFromAcquisition = inputs.currentAnnualDonations * (inputs.newDonorAcquisitionIncrease / 100);
-    const totalAdditionalDonations = additionalDonationsFromRetention + additionalDonationsFromAcquisition;
-    const additionalDonationValue = totalAdditionalDonations * inputs.averageDonationValue;
-    const overallIncreaseValue = inputs.currentAnnualDonations * (inputs.donationIncreasePercent / 100) * inputs.averageDonationValue;
+    const additionalDonationsFromOverallIncrease = inputs.currentAnnualDonations * (inputs.donationIncreasePercent / 100);
+    const totalAdditionalDonations = additionalDonationsFromRetention + additionalDonationsFromAcquisition + additionalDonationsFromOverallIncrease;
+    
+    // Convert to volume in litres
+    const volumeFromRetention = additionalDonationsFromRetention * AVERAGE_DONATION_VOLUME_LITRES;
+    const volumeFromAcquisition = additionalDonationsFromAcquisition * AVERAGE_DONATION_VOLUME_LITRES;
+    const volumeFromOverallIncrease = additionalDonationsFromOverallIncrease * AVERAGE_DONATION_VOLUME_LITRES;
+    const totalAdditionalVolumeLitres = totalAdditionalDonations * AVERAGE_DONATION_VOLUME_LITRES;
+    
     return {
-      currentDonationValue,
-      additionalDonationsFromRetention: additionalDonationsFromRetention * inputs.averageDonationValue,
-      additionalDonationsFromAcquisition: additionalDonationsFromAcquisition * inputs.averageDonationValue,
-      overallIncreaseValue,
-      totalDonationsValue: additionalDonationValue + overallIncreaseValue
+      currentAnnualVolumeLitres,
+      additionalDonationsFromRetention,
+      additionalDonationsFromAcquisition,
+      additionalDonationsFromOverallIncrease,
+      totalAdditionalDonations,
+      volumeFromRetention,
+      volumeFromAcquisition,
+      volumeFromOverallIncrease,
+      totalAdditionalVolumeLitres,
+      // Keep for compatibility with total benefit calculation (using a placeholder value per litre for ROI calc)
+      totalDonationsValue: 0 // Volume-based, not revenue-based
     };
   };
 
@@ -1924,12 +1938,21 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
               {valueDriver === 'donations' && (
                 <>
                   <div className="bg-red-50 rounded-lg p-4 mb-4">
-                    <h3 className="font-semibold text-red-900 mb-2">Blood Donation Value: Increasing Collection Volume</h3>
-                    <p className="text-sm text-red-700 mb-3">A modern digital donor experience increases registration rates, improves booking completion, and drives repeat donations. Better engagement means more life-saving donations.</p>
+                    <h3 className="font-semibold text-red-900 mb-2">Blood Donation Volume: Increasing Collection</h3>
+                    <p className="text-sm text-red-700 mb-3">A modern digital donor experience increases registration rates, improves booking completion, and drives repeat donations. Better engagement means more life-saving blood collected.</p>
                     <div className="text-xs text-red-600"><strong>Expected Outcomes:</strong> 8-15% donation volume increase • Higher donor retention • More new donor acquisitions</div>
                   </div>
                   <SliderInput label="Current Annual Donations" value={inputs.currentAnnualDonations} onChange={(val) => handleInputChange('currentAnnualDonations', val)} min={500000} max={3000000} step={50000} helper="Total blood donations per year" />
-                  <SliderInput label="Average Value per Donation" value={inputs.averageDonationValue} onChange={(val) => handleInputChange('averageDonationValue', val)} min={200} max={800} step={25} prefix="$" helper="Economic value of each donation" />
+                  <div className="bg-gray-50 rounded-lg p-3 mt-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Average Donation Volume</span>
+                      <span className="font-semibold">0.5 litres</span>
+                    </div>
+                    <div className="flex justify-between text-sm mt-1">
+                      <span className="text-gray-600">Current Annual Blood Volume</span>
+                      <span className="font-semibold text-red-600">{formatNumber(inputs.currentAnnualDonations * 0.5)} litres</span>
+                    </div>
+                  </div>
                   <div className="border-t pt-4 mt-4">
                     <h4 className="font-medium text-gray-700 mb-3">Expected Improvements</h4>
                     <SliderInput label="Overall Donation Volume Increase" value={inputs.donationIncreasePercent} onChange={(val) => handleInputChange('donationIncreasePercent', val)} min={0} max={25} step={1} suffix="%" helper="Total increase in donations" />
@@ -2049,17 +2072,17 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
             <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
               <h2 className="text-xl md:text-2xl font-bold mb-6">Total Business Impact</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Annual Benefit</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(totalAnnualBenefit)}</div></div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">{roiYears}-Year Benefit</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(multiYearBenefit)}</div></div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">ROI ({roiYears} Years)</div><div className="text-xl md:text-2xl font-bold">{roi.toFixed(0)}%</div></div>
-                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Payback Period</div><div className="text-xl md:text-2xl font-bold">{paybackMonths.toFixed(1)} months</div></div>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Additional Blood Volume (Annual)</div><div className="text-xl md:text-2xl font-bold">+{formatNumber(donations.totalAdditionalVolumeLitres)} L</div></div>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Additional Donations (Annual)</div><div className="text-xl md:text-2xl font-bold">+{formatNumber(donations.totalAdditionalDonations)}</div></div>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Annual TCO Savings</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(tco.totalTCOSavings)}</div></div>
+                <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">{roiYears}-Year TCO Savings</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(tco.totalTCOSavings * roiYears)}</div></div>
               </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Value Driver Breakdown</h3>
               <div className="space-y-3">
-                {enabledDrivers.includes('donations') && <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg"><div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-red-600" /><span className="font-medium text-gray-900">Blood Donation Value</span></div><span className="text-lg font-bold text-red-600">{formatCurrency(donations.totalDonationsValue)}</span></div>}
+                {enabledDrivers.includes('donations') && <div className="flex justify-between items-center p-3 bg-red-50 rounded-lg"><div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-red-600" /><span className="font-medium text-gray-900">Additional Blood Volume</span></div><span className="text-lg font-bold text-red-600">+{formatNumber(donations.totalAdditionalVolumeLitres)} L</span></div>}
                 {enabledDrivers.includes('tco') && <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg"><div className="flex items-center gap-2"><DollarSign className="w-5 h-5 text-green-600" /><span className="font-medium text-gray-900">TCO Savings</span></div><span className="text-lg font-bold text-green-600">{formatCurrency(tco.totalTCOSavings)}</span></div>}
                 {enabledDrivers.includes('revenue') && <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg"><div className="flex items-center gap-2"><TrendingUp className="w-5 h-5 text-green-600" /><span className="font-medium text-gray-900">Revenue Growth</span></div><span className="text-lg font-bold text-green-600">{formatCurrency(revenue.totalLift)}</span></div>}
                 {enabledDrivers.includes('efficiency') && <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg"><div className="flex items-center gap-2"><Zap className="w-5 h-5 text-blue-600" /><span className="font-medium text-gray-900">Efficiency</span></div><span className="text-lg font-bold text-blue-600">{formatCurrency(efficiency.totalSavings)}</span></div>}
@@ -2070,7 +2093,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
 
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
               <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
-                {valueDriver === 'donations' && 'Blood Donation Value Details'}
+                {valueDriver === 'donations' && 'Blood Volume Increase Details'}
                 {valueDriver === 'tco' && 'TCO Savings Details'}
                 {valueDriver === 'revenue' && 'Revenue Growth Details'}
                 {valueDriver === 'efficiency' && 'Efficiency Savings'}
@@ -2078,7 +2101,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                 {valueDriver === 'cx' && 'Donor Experience Details'}
               </h3>
               <div className="space-y-3">
-                {valueDriver === 'donations' && (<><div className="flex justify-between text-sm"><span className="text-gray-600">Retention Value Increase</span><span className="font-semibold">{formatCurrency(donations.additionalDonationsFromRetention)}</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">New Donor Acquisition Value</span><span className="font-semibold">{formatCurrency(donations.additionalDonationsFromAcquisition)}</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">Overall Volume Increase Value</span><span className="font-semibold">{formatCurrency(donations.overallIncreaseValue)}</span></div><div className="flex justify-between text-sm pt-3 border-t"><span className="font-medium">Total Donation Value Increase</span><span className="font-bold text-red-600">{formatCurrency(donations.totalDonationsValue)}</span></div></>)}
+                {valueDriver === 'donations' && (<><div className="flex justify-between text-sm"><span className="text-gray-600">From Donor Retention</span><span className="font-semibold">+{formatNumber(donations.volumeFromRetention)} L ({formatNumber(donations.additionalDonationsFromRetention)} donations)</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">From New Donor Acquisition</span><span className="font-semibold">+{formatNumber(donations.volumeFromAcquisition)} L ({formatNumber(donations.additionalDonationsFromAcquisition)} donations)</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">From Overall Volume Increase</span><span className="font-semibold">+{formatNumber(donations.volumeFromOverallIncrease)} L ({formatNumber(donations.additionalDonationsFromOverallIncrease)} donations)</span></div><div className="flex justify-between text-sm pt-3 border-t"><span className="font-medium">Total Additional Blood Volume</span><span className="font-bold text-red-600">+{formatNumber(donations.totalAdditionalVolumeLitres)} L ({formatNumber(donations.totalAdditionalDonations)} donations)</span></div></>)}
                 {valueDriver === 'tco' && (<><div className="flex justify-between text-sm"><span className="text-gray-600">Current Drupal Costs</span><span className="font-semibold text-red-500">-{formatCurrency(tco.currentDrupalCost)}</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">Current Oracle Costs</span><span className="font-semibold text-red-500">-{formatCurrency(tco.currentOracleCost)}</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">Contentful Annual Cost</span><span className="font-semibold">+{formatCurrency(tco.contentfulAnnualCost)}</span></div><div className="flex justify-between text-sm pt-3 border-t"><span className="font-medium">Net Annual TCO Savings</span><span className="font-bold text-green-600">{formatCurrency(tco.totalTCOSavings)}</span></div></>)}
                 {valueDriver === 'revenue' && (<><div className="flex justify-between text-sm"><span className="text-gray-600">Conversion Rate Lift</span><span className="font-semibold">{formatCurrency(revenue.conversionLift)}</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">Time-to-Market Value</span><span className="font-semibold">{formatCurrency(revenue.timeToMarketValue)}</span></div><div className="flex justify-between text-sm pt-3 border-t"><span className="font-medium">Total Revenue Impact</span><span className="font-bold text-green-600">{formatCurrency(revenue.totalLift)}</span></div></>)}
                 {valueDriver === 'efficiency' && (<><div className="flex justify-between text-sm"><span className="text-gray-600">Dev Cost Savings</span><span className="font-semibold">{formatCurrency(efficiency.devCostSavings)}</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">CMS Consolidation</span><span className="font-semibold">{formatCurrency(efficiency.cmsConsolidationSavings)}</span></div><div className="flex justify-between text-sm"><span className="text-gray-600">Marketing Productivity</span><span className="font-semibold">{formatCurrency(efficiency.marketingProductivityGain)}</span></div><div className="flex justify-between text-sm pt-3 border-t"><span className="font-medium">Total Savings</span><span className="font-bold text-blue-600">{formatCurrency(efficiency.totalSavings)}</span></div></>)}
