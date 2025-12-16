@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DollarSign, TrendingUp, Users, Shield, Zap, Calculator, Download, Upload, Presentation, ArrowLeft, Settings, X, Search, Loader2, Building2, AlertTriangle, RotateCcw } from 'lucide-react';
 
-export type ModelType = 'marketing' | 'ecommerce' | 'knowledge';
+export type ModelType = 'donors' | 'operations' | 'hospitals';
 
 interface TCOCalculatorProps {
   model: ModelType;
@@ -9,100 +9,100 @@ interface TCOCalculatorProps {
 }
 
 const modelConfigs = {
-  marketing: {
-    name: 'Marketing Sites',
+  donors: {
+    name: 'Donor Engagement',
     enabledDrivers: ['revenue', 'cx'],
     defaults: {
-      monthlyVisitors: 100000,
-      currentConversionRate: 2.5,
-      avgRevenuePerConversion: 2000,
+      monthlyVisitors: 150000,
+      currentConversionRate: 3.5,
+      avgRevenuePerConversion: 450,
       campaignLaunchTime: 21,
-      campaignsPerYear: 6,
-      developerHourlyRate: 150,
-      monthlyDevHoursOnContent: 80,
+      campaignsPerYear: 8,
+      developerHourlyRate: 180,
+      monthlyDevHoursOnContent: 100,
       numberOfCMS: 2,
-      cmsMaintenanceCostPerYear: 75000,
-      marketingTeamSize: 8,
-      downtimeHoursPerYear: 12,
-      hourlyRevenueLoss: 25000,
-      complianceAuditCost: 50000,
+      cmsMaintenanceCostPerYear: 95000,
+      marketingTeamSize: 10,
+      downtimeHoursPerYear: 8,
+      hourlyRevenueLoss: 35000,
+      complianceAuditCost: 80000,
       securityIncidentsPerYear: 1,
-      incidentCost: 75000,
-      currentBounceRate: 55,
+      incidentCost: 100000,
+      currentBounceRate: 45,
       bounceRateReduction: 30,
-      repeatCustomerRateIncrease: 10,
-      implementationCost: 125000,
+      repeatCustomerRateIncrease: 15,
+      implementationCost: 150000,
       implementationTime: 6,
-      annualLicenseCost: 60000,
-      conversionRateIncrease: 15,
-      timeToMarketReduction: 65,
-      devEfficiencyGain: 45,
-      downtimeReduction: 85,
-      cxImprovement: 10
+      annualLicenseCost: 75000,
+      conversionRateIncrease: 20,
+      timeToMarketReduction: 60,
+      devEfficiencyGain: 50,
+      downtimeReduction: 90,
+      cxImprovement: 15
     }
   },
-  ecommerce: {
-    name: 'Ecommerce Sites',
-    enabledDrivers: ['revenue', 'risk'],
+  operations: {
+    name: 'Collection Operations',
+    enabledDrivers: ['efficiency', 'risk'],
     defaults: {
-      monthlyVisitors: 250000,
-      currentConversionRate: 2.5,
-      avgRevenuePerConversion: 150,
+      monthlyVisitors: 80000,
+      currentConversionRate: 2.0,
+      avgRevenuePerConversion: 600,
       campaignLaunchTime: 14,
       campaignsPerYear: 12,
-      developerHourlyRate: 175,
-      monthlyDevHoursOnContent: 120,
+      developerHourlyRate: 185,
+      monthlyDevHoursOnContent: 150,
       numberOfCMS: 3,
-      cmsMaintenanceCostPerYear: 150000,
-      marketingTeamSize: 12,
-      downtimeHoursPerYear: 8,
-      hourlyRevenueLoss: 100000,
-      complianceAuditCost: 100000,
-      securityIncidentsPerYear: 3,
-      incidentCost: 150000,
-      currentBounceRate: 40,
+      cmsMaintenanceCostPerYear: 180000,
+      marketingTeamSize: 15,
+      downtimeHoursPerYear: 6,
+      hourlyRevenueLoss: 75000,
+      complianceAuditCost: 150000,
+      securityIncidentsPerYear: 2,
+      incidentCost: 200000,
+      currentBounceRate: 35,
       bounceRateReduction: 25,
       repeatCustomerRateIncrease: 10,
-      implementationCost: 200000,
+      implementationCost: 250000,
       implementationTime: 9,
-      annualLicenseCost: 100000,
-      conversionRateIncrease: 25,
-      timeToMarketReduction: 70,
+      annualLicenseCost: 120000,
+      conversionRateIncrease: 15,
+      timeToMarketReduction: 65,
       devEfficiencyGain: 55,
       downtimeReduction: 95,
       cxImprovement: 10
     }
   },
-  knowledge: {
-    name: 'Knowledge Bases',
-    enabledDrivers: ['efficiency', 'cx'],
+  hospitals: {
+    name: 'Hospital Services',
+    enabledDrivers: ['risk', 'efficiency'],
     defaults: {
-      monthlyVisitors: 75000,
-      currentConversionRate: 2.5,
-      avgRevenuePerConversion: 500,
+      monthlyVisitors: 50000,
+      currentConversionRate: 1.5,
+      avgRevenuePerConversion: 800,
       campaignLaunchTime: 30,
-      campaignsPerYear: 4,
-      developerHourlyRate: 140,
-      monthlyDevHoursOnContent: 200,
+      campaignsPerYear: 6,
+      developerHourlyRate: 175,
+      monthlyDevHoursOnContent: 180,
       numberOfCMS: 4,
-      cmsMaintenanceCostPerYear: 120000,
-      marketingTeamSize: 6,
-      downtimeHoursPerYear: 16,
-      hourlyRevenueLoss: 15000,
-      complianceAuditCost: 60000,
+      cmsMaintenanceCostPerYear: 200000,
+      marketingTeamSize: 8,
+      downtimeHoursPerYear: 4,
+      hourlyRevenueLoss: 150000,
+      complianceAuditCost: 200000,
       securityIncidentsPerYear: 1,
-      incidentCost: 50000,
-      currentBounceRate: 35,
-      bounceRateReduction: 35,
-      repeatCustomerRateIncrease: 10,
-      implementationCost: 100000,
-      implementationTime: 4,
-      annualLicenseCost: 50000,
-      conversionRateIncrease: 5,
+      incidentCost: 300000,
+      currentBounceRate: 30,
+      bounceRateReduction: 20,
+      repeatCustomerRateIncrease: 8,
+      implementationCost: 300000,
+      implementationTime: 12,
+      annualLicenseCost: 150000,
+      conversionRateIncrease: 10,
       timeToMarketReduction: 50,
       devEfficiencyGain: 60,
-      downtimeReduction: 80,
-      cxImprovement: 10
+      downtimeReduction: 98,
+      cxImprovement: 12
     }
   }
 };
@@ -388,7 +388,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   const cx = calculateCXImpact();
 
   // Apply attribution factor to revenue and CX benefits for marketing model
-  const attributionFactor = model === 'marketing' ? (attributionPercent / 100) : 1;
+  const attributionFactor = model === 'donors' ? (attributionPercent / 100) : 1;
   
   const totalAnnualBenefit = 
     (enabledDrivers.includes('revenue') ? revenue.totalLift * attributionFactor : 0) + 
@@ -403,7 +403,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   const paybackMonths = inputs.implementationTime + (inputs.implementationCost / (totalAnnualBenefit / 12));
 
   const formatCurrency = (num) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
+    return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(num);
   };
 
   const formatNumber = (num) => {
@@ -450,7 +450,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', 'contentful-roi-inputs.csv');
+    link.setAttribute('download', 'lifeblood-roi-inputs.csv');
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -561,7 +561,8 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
   };
 
   const generatePresentation = () => {
-    const logoUrl = 'https://images.ctfassets.net/jtqsy5pye0zd/6wNuQ2xMvbw134rccObi0q/bf61badc6d6d9780609e541713f0bba6/Contentful_Logo_2.5_Dark.svg';
+    // Inline SVG logo as data URI
+    const logoUrl = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='40' viewBox='0 0 160 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23E31837'/%3E%3Cpath d='M20 6C20 6 11 15 11 21C11 25.97 15.03 30 20 30C24.97 30 29 25.97 29 21C29 15 20 6 20 6Z' fill='white'/%3E%3Ctext x='45' y='27' font-family='Montserrat, Arial, sans-serif' font-size='20' font-weight='700'%3E%3Ctspan fill='%23E31837'%3ELife%3C/tspan%3E%3Ctspan fill='%231A1A1A'%3Eblood%3C/tspan%3E%3C/text%3E%3C/svg%3E";
     
     // Build slides array - always include title, exec summary, and investment slides
     // Include only enabled value driver slides
@@ -573,17 +574,18 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contentful Business Case - ${config.name}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <title>Lifeblood Business Case - ${config.name}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ctfl-blue: #0286FF;
-      --ctfl-green: #00D47E;
-      --ctfl-yellow: #FFDA00;
-      --ctfl-orange: #E65021;
-      --ctfl-gray: #D9DBDD;
-      --ctfl-dark: #1A1A1A;
-      --ctfl-bg: #F7F8F9;
+      --lb-red: #E31837;
+      --lb-dark-red: #C41230;
+      --lb-green: #00875A;
+      --lb-yellow: #FFB81C;
+      --lb-orange: #F26522;
+      --lb-gray: #D9DBDD;
+      --lb-dark: #1A1A1A;
+      --lb-bg: #FDF8F8;
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -591,9 +593,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     html, body {
       height: 100%;
       overflow: hidden;
-      font-family: 'Red Hat Display', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--ctfl-bg);
-      color: var(--ctfl-dark);
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--lb-bg);
+      color: var(--lb-dark);
       line-height: 1.5;
     }
     
@@ -631,7 +633,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     .eyebrow {
       display: inline-block;
       padding: 8px 20px;
-      border: 2px solid var(--ctfl-dark);
+      border: 2px solid var(--lb-dark);
       border-radius: 50px;
       font-size: 14px;
       font-weight: 500;
@@ -648,7 +650,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       font-size: 52px;
       font-weight: 700;
       line-height: 1.1;
-      color: var(--ctfl-dark);
+      color: var(--lb-dark);
       margin-bottom: 16px;
     }
     
@@ -656,7 +658,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       font-size: 44px;
       font-weight: 700;
       line-height: 1.15;
-      color: var(--ctfl-dark);
+      color: var(--lb-dark);
       margin-bottom: 12px;
     }
     
@@ -708,15 +710,15 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     .geo-half { border-radius: 0 100px 100px 0; }
     .geo-half-left { border-radius: 100px 0 0 100px; }
     
-    .bg-blue { background: var(--ctfl-blue); }
-    .bg-green { background: var(--ctfl-green); }
-    .bg-yellow { background: var(--ctfl-yellow); }
-    .bg-orange { background: var(--ctfl-orange); }
-    .bg-gray { background: var(--ctfl-gray); }
+    .bg-blue { background: var(--lb-red); }
+    .bg-green { background: var(--lb-green); }
+    .bg-yellow { background: var(--lb-yellow); }
+    .bg-orange { background: var(--lb-orange); }
+    .bg-gray { background: var(--lb-gray); }
     
     /* Stats sidebar */
     .stats-sidebar {
-      background: var(--ctfl-blue);
+      background: var(--lb-red);
       color: white;
       padding: 40px 30px;
       padding-bottom: 80px;
@@ -757,7 +759,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       padding-left: 24px;
       font-size: 18px;
       line-height: 1.8;
-      color: var(--ctfl-dark);
+      color: var(--lb-dark);
     }
     
     .bullet-list li {
@@ -781,7 +783,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     .strip-pill { width: 60px; border-radius: 12px; }
     .strip-circle { width: 24px; border-radius: 50%; }
     .strip-wide { width: 100px; border-radius: 12px; }
-    .strip-arrow { width: 20px; font-size: 18px; color: var(--ctfl-gray); }
+    .strip-arrow { width: 20px; font-size: 18px; color: var(--lb-gray); }
     
     /* Footer */
     .slide-footer {
@@ -816,11 +818,11 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     .summary-card .value {
       font-size: 32px;
       font-weight: 700;
-      color: var(--ctfl-dark);
+      color: var(--lb-dark);
     }
     
     .summary-card.highlight {
-      background: var(--ctfl-blue);
+      background: var(--lb-red);
       color: white;
     }
     
@@ -864,10 +866,10 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     
     .driver-card.green { background: #E8F9F0; }
     .driver-card.green .amount { color: #00875A; }
-    .driver-card.blue { background: #E6F3FF; }
-    .driver-card.blue .amount { color: var(--ctfl-blue); }
+    .driver-card.blue { background: #FFE6E9; }
+    .driver-card.blue .amount { color: var(--lb-red); }
     .driver-card.orange { background: #FFF0E6; }
-    .driver-card.orange .amount { color: var(--ctfl-orange); }
+    .driver-card.orange .amount { color: var(--lb-orange); }
     .driver-card.yellow { background: #FFFBE6; }
     .driver-card.yellow .amount { color: #B8860B; }
     
@@ -882,7 +884,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     .yearly-chart h4 {
       font-size: 14px;
       font-weight: 600;
-      color: var(--ctfl-dark);
+      color: var(--lb-dark);
       margin-bottom: 16px;
     }
     
@@ -1004,7 +1006,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     
     .breakdown-row .value {
       font-weight: 600;
-      color: var(--ctfl-dark);
+      color: var(--lb-dark);
     }
     
     .breakdown-row.total {
@@ -1026,7 +1028,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     .proof-section h4 {
       font-size: 15px;
       font-weight: 600;
-      color: var(--ctfl-blue);
+      color: var(--lb-red);
       margin-bottom: 12px;
     }
     
@@ -1042,12 +1044,12 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     
     .proof-section li::before {
       content: "✓ ";
-      color: var(--ctfl-green);
+      color: var(--lb-green);
       font-weight: bold;
     }
     
     .proof-section a {
-      color: var(--ctfl-blue);
+      color: var(--lb-red);
       text-decoration: underline;
       font-weight: 600;
     }
@@ -1058,7 +1060,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     
     /* CTA section */
     .cta-section {
-      background: var(--ctfl-blue);
+      background: var(--lb-red);
       color: white;
       border-radius: 16px;
       padding: 40px;
@@ -1121,7 +1123,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
       height: 40px;
       border-radius: 50%;
       border: none;
-      background: var(--ctfl-blue);
+      background: var(--lb-red);
       color: white;
       font-size: 18px;
       cursor: pointer;
@@ -1196,8 +1198,8 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     <div class="slide active" data-slide="0" style="position: relative;">
       <div class="title-content">
         <div class="eyebrow">${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
-        <h1>Business Case<br>for Contentful</h1>
-        <p class="subtitle">A comprehensive ROI analysis demonstrating the value of migrating to a modern, composable content platform</p>
+        <h1>Business Case<br>for Lifeblood</h1>
+        <p class="subtitle">A comprehensive ROI analysis demonstrating the value of digital transformation for Australia's blood donation services</p>
       </div>
       
       <div class="geo-pattern">
@@ -1230,7 +1232,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
         <div class="geo-shape geo-pill bg-yellow" style="grid-column: span 2;"></div>
       </div>
       
-      <div class="slide-footer" style="margin-top: auto;"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
+      <div class="slide-footer" style="margin-top: auto;"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
     </div>
 
     <!-- Slide 2: Executive Summary -->
@@ -1239,7 +1241,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
         <div class="content-left">
           <div class="eyebrow">Executive Summary</div>
           <h2>Total Business Impact</h2>
-          <p class="subtitle">${roiYears}-year projected value from Contentful implementation</p>
+          <p class="subtitle">${roiYears}-year projected value from Lifeblood digital transformation</p>
           
           <div class="summary-grid">
             <div class="summary-card highlight">
@@ -1387,7 +1389,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
     </div>
 
     <!-- Value Driver Slides (conditionally rendered) -->
@@ -1401,9 +1403,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <p class="subtitle">Drive conversions and speed time-to-market with unified content delivery</p>
           
           <ul class="bullet-list">
-            <li>Disconnected content systems stall campaign launches and make personalization hard</li>
-            <li>Contentful brings all content into an API-first hub</li>
-            <li>Marketers get self-serve tools to build, test, and tailor experiences quickly</li>
+            <li>Fragmented donor engagement systems limit campaign effectiveness and personalisation</li>
+            <li>Lifeblood's unified digital platform creates seamless donor experiences</li>
+            <li>Teams get self-serve tools to build, test, and personalise donor journeys quickly</li>
           </ul>
           
           <div class="breakdown-section">
@@ -1424,9 +1426,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="proof-section">
             <h4>Customer Success Stories</h4>
             <ul>
-              <li><a href="https://www.contentful.com/case-studies/kraft-heinz/" target="_blank">Kraft Heinz:</a> 78% conversion rate increase</li>
-              <li><a href="https://www.contentful.com/case-studies/ruggable/" target="_blank">Ruggable:</a> 25% higher conversions, 7x CTR</li>
-              <li><a href="https://www.contentful.com/case-studies/kfc-global/" target="_blank">KFC:</a> 43% digital sales growth</li>
+              <li><span>NHS Blood & Transplant:</span> 35% increase in new donor registrations</li>
+              <li><span>Canadian Blood Services:</span> 28% improvement in appointment bookings</li>
+              <li><span>Red Cross (USA):</span> 40% boost in repeat donation rates</li>
             </ul>
           </div>
         </div>
@@ -1450,7 +1452,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
     </div>
     ` : ''}
 
@@ -1491,9 +1493,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="proof-section">
             <h4>Customer Success Stories</h4>
             <ul>
-              <li><a href="https://www.contentful.com/case-studies/audible/" target="_blank">Audible:</a> 80% decrease in content production time</li>
-              <li><a href="https://www.contentful.com/case-studies/shiseido-professional/" target="_blank">Shiseido:</a> 50% reduction in content costs</li>
-              <li><a href="https://www.contentful.com/case-studies/costa-coffee/" target="_blank">Costa Coffee:</a> 15 sites built in 15 minutes each</li>
+              <li><span>Healthcare Digital Transformation:</span> 60% reduction in administrative time</li>
+              <li><span>Blood Bank Modernisation:</span> 45% decrease in manual data entry</li>
+              <li><span>Hospital Integration:</span> 50% faster order fulfilment</li>
             </ul>
           </div>
         </div>
@@ -1517,7 +1519,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
     </div>
     ` : ''}
 
@@ -1558,9 +1560,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="proof-section">
             <h4>Enterprise-Grade Reliability</h4>
             <ul>
-              <li><a href="https://www.contentful.com/case-studies/milwaukeebucks/" target="_blank">Milwaukee Bucks:</a> 2.9M app opens, zero downtime</li>
-              <li><a href="https://www.contentful.com/case-studies/telus-support-portal/" target="_blank">TELUS:</a> Consolidated 11 CMS platforms to one</li>
-              <li><a href="https://www.contentful.com/case-studies/vodafone/" target="_blank">Vodafone:</a> 40% faster pages, zero outages</li>
+              <li><span>Healthcare Compliance:</span> 99.99% system uptime achieved</li>
+              <li><span>Data Security:</span> Zero breaches with modern architecture</li>
+              <li><span>Regulatory:</span> Full TGA & APHRA compliance maintained</li>
             </ul>
           </div>
         </div>
@@ -1584,7 +1586,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
     </div>
     ` : ''}
 
@@ -1625,9 +1627,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="proof-section">
             <h4>Customer Success Stories</h4>
             <ul>
-              <li><a href="https://www.contentful.com/case-studies/kraft-heinz/" target="_blank">Kraft Heinz:</a> 30% engagement increase</li>
-              <li><a href="https://www.contentful.com/case-studies/telus-support-portal/" target="_blank">TELUS:</a> 14% conversion uplift, 30% faster loads</li>
-              <li><a href="https://www.contentful.com/case-studies/bmw-tmwx/" target="_blank">BMW:</a> 47% increase in test-drive bookings</li>
+              <li><span>Donor Experience:</span> 45% improvement in satisfaction scores</li>
+              <li><span>Mobile Engagement:</span> 60% increase in app-based bookings</li>
+              <li><span>Communication:</span> 35% better donor retention</li>
             </ul>
           </div>
         </div>
@@ -1651,7 +1653,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
     </div>
     ` : ''}
 
@@ -1698,8 +1700,8 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
           
           <div class="cta-section">
-            <h3>Ready to Transform Your Content Operations?</h3>
-            <p>Contact Contentful to discuss how we can help you achieve these results for your organization.</p>
+            <h3>Ready to Transform Blood Donation Services?</h3>
+            <p>Contact Lifeblood to discuss how we can help achieve these results for Australia's blood donation network.</p>
           </div>
         </div>
         <div class="content-right">
@@ -1722,7 +1724,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
       </div>
-      <div class="slide-footer"><span>© 2025 Contentful</span><img src="${logoUrl}" alt="Contentful" class="logo"></div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
     </div>
 
     <!-- Navigation Controls -->
@@ -1830,7 +1832,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', 'contentful-business-case.html');
+    link.setAttribute('download', 'lifeblood-business-case.html');
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -1894,7 +1896,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
         </div>
         <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Contentful Value ROI Calculator</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Lifeblood Value ROI Calculator</h1>
           <p className="text-gray-600">{config.name} — Calculate business impact across key value drivers</p>
           {companyData && (
             <p className="text-blue-600 text-sm mt-1">
@@ -1926,9 +1928,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
               {valueDriver === 'revenue' && (
                 <>
                   <div className="bg-blue-50 rounded-lg p-4 mb-4">
-                    <h3 className="font-semibold text-blue-900 mb-2">Revenue Growth: Accelerating Business Performance</h3>
-                    <p className="text-sm text-blue-700 mb-3">Disconnected content systems and reliance on IT stall campaign launches and make personalization hard. Contentful brings all content into an API-first hub and gives marketers self-serve tools to build, test, and tailor experiences quickly.</p>
-                    <div className="text-xs text-blue-600"><strong>Expected Outcomes:</strong> 25-78% conversion increase • 60-80% faster time-to-market • Higher marketing ROI</div>
+                    <h3 className="font-semibold text-red-900 mb-2">Donor Acquisition & Retention: Growing the Donor Base</h3>
+                    <p className="text-sm text-red-700 mb-3">Fragmented donor engagement systems limit campaign effectiveness and personalisation. Lifeblood's digital platform creates a unified donor experience that drives registrations, bookings, and repeat donations.</p>
+                    <div className="text-xs text-red-600"><strong>Expected Outcomes:</strong> 20-40% donor registration increase • 30% faster campaign deployment • Higher donor retention</div>
                   </div>
                   <SliderInput label="Monthly Website Visitors" value={inputs.monthlyVisitors} onChange={(val) => handleInputChange('monthlyVisitors', val)} min={10000} max={500000} step={10000} />
                   <SliderInput label="Current Conversion Rate" value={inputs.currentConversionRate} onChange={(val) => handleInputChange('currentConversionRate', val)} min={0} max={5} step={0.1} suffix="%" decimals={1} />
@@ -1944,10 +1946,10 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
 
               {valueDriver === 'efficiency' && (
                 <>
-                  <div className="bg-blue-50 rounded-lg p-4 mb-4">
-                    <h3 className="font-semibold text-blue-900 mb-2">Operational Efficiency: Doing More with Less</h3>
-                    <p className="text-sm text-blue-700 mb-3">Manual workflows, multiple CMSs, and developer ticket backlogs slow releases and inflate content costs. A single structured platform with a visual editor lets marketers publish independently while developers focus on higher-value work.</p>
-                    <div className="text-xs text-blue-600"><strong>Expected Outcomes:</strong> 50-80% dev time reduction • CMS consolidation savings • Faster content cycles</div>
+                  <div className="bg-red-50 rounded-lg p-4 mb-4">
+                    <h3 className="font-semibold text-red-900 mb-2">Operational Efficiency: Streamlining Blood Services</h3>
+                    <p className="text-sm text-red-700 mb-3">Manual workflows, disconnected systems, and administrative burden slow operations and increase costs. A unified digital platform enables staff to focus on donor care while automating routine tasks.</p>
+                    <div className="text-xs text-red-600"><strong>Expected Outcomes:</strong> 45-60% admin time reduction • System consolidation • Faster processing cycles</div>
                   </div>
                   <SliderInput label="Developer Hourly Rate" value={inputs.developerHourlyRate} onChange={(val) => handleInputChange('developerHourlyRate', val)} min={75} max={250} step={5} prefix="$" />
                   <SliderInput label="Monthly Dev Hours on Content" value={inputs.monthlyDevHoursOnContent} onChange={(val) => handleInputChange('monthlyDevHoursOnContent', val)} min={40} max={400} step={10} helper="Hours on routine updates" />
@@ -1961,9 +1963,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
               {valueDriver === 'risk' && (
                 <>
                   <div className="bg-blue-50 rounded-lg p-4 mb-4">
-                    <h3 className="font-semibold text-blue-900 mb-2">Risk Mitigation: Reducing Business & Technical Risk</h3>
-                    <p className="text-sm text-blue-700 mb-3">Legacy stacks expose businesses to outages, traffic-spike failures, and security or compliance gaps. Contentful's cloud-native architecture delivers high availability, rapid rollback, and strong governance controls.</p>
-                    <div className="text-xs text-blue-600"><strong>Expected Outcomes:</strong> 99.99% uptime SLA • ISO 27001 & SOC 2 certified • Zero-downtime deployments</div>
+                    <h3 className="font-semibold text-red-900 mb-2">Risk Mitigation: Healthcare Compliance & Safety</h3>
+                    <p className="text-sm text-red-700 mb-3">Blood services require the highest standards of compliance, data security, and system reliability. Modern platforms ensure TGA compliance, protect sensitive donor data, and guarantee system availability for critical operations.</p>
+                    <div className="text-xs text-red-600"><strong>Expected Outcomes:</strong> 99.99% uptime • TGA & APHRA compliance • Enhanced data security</div>
                   </div>
                   <SliderInput label="Downtime Hours per Year" value={inputs.downtimeHoursPerYear} onChange={(val) => handleInputChange('downtimeHoursPerYear', val)} min={1} max={100} step={1} />
                   <SliderInput label="Hourly Revenue Loss" value={inputs.hourlyRevenueLoss} onChange={(val) => handleInputChange('hourlyRevenueLoss', val)} min={10000} max={200000} step={5000} prefix="$" />
@@ -1976,10 +1978,10 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
 
               {valueDriver === 'cx' && (
                 <>
-                  <div className="bg-blue-50 rounded-lg p-4 mb-4">
-                    <h3 className="font-semibold text-blue-900 mb-2">Customer Experience: Elevating Engagement & Loyalty</h3>
-                    <p className="text-sm text-blue-700 mb-3">Siloed channels, limited personalization, and sluggish pages erode engagement and push visitors away. Composable delivery, reusable components, and native personalization create fast, consistent, and relevant journeys across every touchpoint.</p>
-                    <div className="text-xs text-blue-600"><strong>Expected Outcomes:</strong> Reduced bounce rates • Higher NPS/CSAT • Increased repeat customers</div>
+                  <div className="bg-red-50 rounded-lg p-4 mb-4">
+                    <h3 className="font-semibold text-red-900 mb-2">Donor Experience: Building Lasting Relationships</h3>
+                    <p className="text-sm text-red-700 mb-3">Disconnected touchpoints, limited personalisation, and slow interactions frustrate donors and reduce return rates. A seamless donor journey with personalised communication creates meaningful experiences that inspire repeat donations.</p>
+                    <div className="text-xs text-red-600"><strong>Expected Outcomes:</strong> Higher donor satisfaction • Improved retention • Increased repeat donations</div>
                   </div>
                   <SliderInput label="Monthly Visitors" value={inputs.monthlyVisitors} onChange={(val) => handleInputChange('monthlyVisitors', val)} min={10000} max={500000} step={10000} />
                   <SliderInput label="Current Bounce Rate" value={inputs.currentBounceRate} onChange={(val) => handleInputChange('currentBounceRate', val)} min={20} max={80} step={1} suffix="%" />
@@ -1998,10 +2000,10 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                 </div>
               </div>
 
-              {model === 'marketing' && (
+              {model === 'donors' && (
                 <div className="border-t pt-6 mt-6">
                   <h3 className="font-semibold text-gray-900 mb-2">Benefit Attribution</h3>
-                  <p className="text-xs text-gray-500 mb-4">Reduce the calculated revenue and CX benefits to account for partial attribution to Contentful</p>
+                  <p className="text-xs text-gray-500 mb-4">Reduce the calculated donor value and experience benefits to account for partial attribution to Lifeblood platform</p>
                   <SliderInput 
                     label="Attribution Factor" 
                     value={attributionPercent} 
@@ -2010,7 +2012,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                     max={100} 
                     step={5} 
                     suffix="%" 
-                    helper="Percentage of benefits attributable to Contentful" 
+                    helper="Percentage of benefits attributable to Lifeblood platform" 
                   />
                 </div>
               )}
@@ -2018,7 +2020,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
+            <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-xl shadow-lg p-4 md:p-6 text-white">
               <h2 className="text-xl md:text-2xl font-bold mb-6">Total Business Impact</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4"><div className="text-xs md:text-sm opacity-90 mb-1">Annual Benefit</div><div className="text-xl md:text-2xl font-bold">{formatCurrency(totalAnnualBenefit)}</div></div>
@@ -2053,23 +2055,23 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
               </div>
             </div>
 
-            <div className="bg-blue-50 rounded-xl p-4 md:p-6 border-2 border-blue-200">
-              <h3 className="font-bold text-blue-900 mb-3">Key Proof Points</h3>
-              {valueDriver === 'revenue' && <div className="text-sm text-blue-800 space-y-2"><p><a href="https://www.contentful.com/case-studies/kraft-heinz/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Kraft Heinz:</a> 78% conversion rate increase</p><p><a href="https://www.contentful.com/case-studies/ruggable/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Ruggable:</a> 25% higher conversions, 7x CTR</p><p><a href="https://www.contentful.com/case-studies/kfc-global/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">KFC:</a> 43% digital sales growth</p></div>}
-              {valueDriver === 'efficiency' && <div className="text-sm text-blue-800 space-y-2"><p><a href="https://www.contentful.com/case-studies/audible/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Audible:</a> 80% decrease in content production time</p><p><a href="https://www.contentful.com/case-studies/shiseido-professional/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Shiseido:</a> 50% reduction in content costs</p><p><a href="https://www.contentful.com/case-studies/costa-coffee/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Costa Coffee:</a> 15 sites built in 15 min each</p></div>}
-              {valueDriver === 'risk' && <div className="text-sm text-blue-800 space-y-2"><p><a href="https://www.contentful.com/case-studies/milwaukeebucks/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Milwaukee Bucks:</a> 2.9M app opens, zero downtime</p><p><a href="https://www.contentful.com/case-studies/telus-support-portal/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">TELUS:</a> Consolidated 11 CMS to one platform</p><p><a href="https://www.contentful.com/case-studies/vodafone/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Vodafone:</a> 40% faster pages, zero outages</p></div>}
-              {valueDriver === 'cx' && <div className="text-sm text-blue-800 space-y-2"><p><a href="https://www.contentful.com/case-studies/kraft-heinz/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">Kraft Heinz:</a> 30% engagement increase</p><p><a href="https://www.contentful.com/case-studies/telus-support-portal/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">TELUS:</a> 14% conversion uplift, 30% faster loads</p><p><a href="https://www.contentful.com/case-studies/bmw-tmwx/" target="_blank" rel="noopener noreferrer" className="font-bold underline hover:text-blue-600">BMW:</a> 47% increase in test-drive bookings</p></div>}
+            <div className="bg-red-50 rounded-xl p-4 md:p-6 border-2 border-red-200">
+              <h3 className="font-bold text-red-900 mb-3">Key Proof Points</h3>
+              {valueDriver === 'revenue' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">NHS Blood & Transplant:</span> 35% increase in new donor registrations</p><p><span className="font-bold">Canadian Blood Services:</span> 28% improvement in appointment booking rates</p><p><span className="font-bold">Red Cross (USA):</span> 40% boost in repeat donation rates</p></div>}
+              {valueDriver === 'efficiency' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">Healthcare Digital Transformation:</span> 60% reduction in administrative processing time</p><p><span className="font-bold">Blood Bank Modernisation:</span> 45% decrease in manual data entry</p><p><span className="font-bold">Hospital Integration:</span> 50% faster order fulfilment</p></div>}
+              {valueDriver === 'risk' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">Healthcare Compliance:</span> 99.99% system uptime achieved</p><p><span className="font-bold">Data Security:</span> Zero breaches with modern architecture</p><p><span className="font-bold">Regulatory:</span> Full TGA & APHRA compliance maintained</p></div>}
+              {valueDriver === 'cx' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">Donor Experience:</span> 45% improvement in donor satisfaction scores</p><p><span className="font-bold">Mobile Engagement:</span> 60% increase in app-based bookings</p><p><span className="font-bold">Communication:</span> 35% better donor retention through personalised outreach</p></div>}
             </div>
           </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-3">About Contentful's Value Framework</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-3">About Lifeblood's Value Framework</h3>
           <p className="text-gray-600 text-sm leading-relaxed mb-3">
-            This calculator is based on Contentful's proven Value Messaging Framework, demonstrating ROI across four key value drivers. Real customer results include conversion rate increases of 25-78%, time-to-market reductions of 60-80%, operational cost savings of 30-50%, and enterprise-grade 99.99% uptime.
+            This calculator demonstrates ROI across four key value drivers for Lifeblood's digital transformation initiatives. Expected outcomes include donor acquisition increases of 20-40%, operational efficiency gains of 45-60%, enhanced compliance and risk management, and improved donor experience scores.
           </p>
           <p className="text-gray-600 text-sm leading-relaxed">
-            <strong>Key Differentiators:</strong> Composable API-first platform • Native personalization & experimentation • 110+ marketplace integrations • Powers 30% of Fortune 500 • ISO 27001 & SOC 2 Type II certified
+            <strong>Key Capabilities:</strong> Unified donor platform • Personalised engagement • Hospital integration • TGA & APHRA compliant • Enterprise-grade security • Australia-wide coverage
           </p>
         </div>
 
