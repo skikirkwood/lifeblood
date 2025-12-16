@@ -138,55 +138,66 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     }
   }, [enabledDrivers, valueDriver]);
 
-  const STORAGE_KEY = `tco-calculator-${model}`;
-  const DRIVERS_STORAGE_KEY = `tco-calculator-drivers-${model}`;
-
-  // Load saved inputs from localStorage on mount
+  // Reset valueDriver and enabledDrivers when model changes, then load from localStorage
   useEffect(() => {
+    const storageKey = `tco-calculator-${model}`;
+    const driversStorageKey = `tco-calculator-drivers-${model}`;
+    
+    // Reset to model defaults first
+    setValueDriver(config.enabledDrivers[0]);
+    setEnabledDrivers(config.enabledDrivers);
+    
+    // Then load saved inputs from localStorage (merge with defaults)
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(storageKey);
       if (saved) {
         const parsedSaved = JSON.parse(saved);
-        // Merge saved values with defaults (in case new fields were added)
         setInputs(prev => ({ ...config.defaults, ...parsedSaved }));
+      } else {
+        setInputs(config.defaults);
       }
     } catch (e) {
       console.error('Failed to load saved inputs:', e);
+      setInputs(config.defaults);
     }
-  }, [model]);
-
-  // Load saved enabled drivers from localStorage on mount
-  useEffect(() => {
+    
+    // Load saved enabled drivers from localStorage
     try {
-      const savedDrivers = localStorage.getItem(DRIVERS_STORAGE_KEY);
+      const savedDrivers = localStorage.getItem(driversStorageKey);
       if (savedDrivers) {
         const parsedDrivers = JSON.parse(savedDrivers);
         if (Array.isArray(parsedDrivers) && parsedDrivers.length > 0) {
           setEnabledDrivers(parsedDrivers);
+          // Ensure valueDriver is valid for loaded drivers
+          if (!parsedDrivers.includes(config.enabledDrivers[0])) {
+            setValueDriver(parsedDrivers[0]);
+          }
         }
       }
     } catch (e) {
       console.error('Failed to load saved drivers:', e);
     }
-  }, [model]);
+  }, [model, config.defaults, config.enabledDrivers]);
 
   // Save enabled drivers to localStorage when they change
   useEffect(() => {
     try {
-      localStorage.setItem(DRIVERS_STORAGE_KEY, JSON.stringify(enabledDrivers));
+      const driversStorageKey = `tco-calculator-drivers-${model}`;
+      localStorage.setItem(driversStorageKey, JSON.stringify(enabledDrivers));
     } catch (e) {
       console.error('Failed to save enabled drivers:', e);
     }
-  }, [enabledDrivers, DRIVERS_STORAGE_KEY]);
+  }, [enabledDrivers, model]);
 
   // Save inputs to localStorage when they change
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(inputs));
+      const storageKey = `tco-calculator-${model}`;
+      localStorage.setItem(storageKey, JSON.stringify(inputs));
     } catch (e) {
       console.error('Failed to save inputs:', e);
     }
-  }, [inputs, STORAGE_KEY]);
+  }, [inputs, model]);
 
   // Track unsaved changes and warn on page unload
   useEffect(() => {
@@ -237,9 +248,12 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
 
   const resetToDefaults = () => {
     setInputs(config.defaults);
+    setEnabledDrivers(config.enabledDrivers);
+    setValueDriver(config.enabledDrivers[0]);
     setIsDirty(false);
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(`tco-calculator-${model}`);
+      localStorage.removeItem(`tco-calculator-drivers-${model}`);
     } catch (e) {
       console.error('Failed to clear saved inputs:', e);
     }
