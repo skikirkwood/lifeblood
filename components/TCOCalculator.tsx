@@ -1426,9 +1426,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
           <div class="proof-section">
             <h4>Customer Success Stories</h4>
             <ul>
-              <li><span>NHS Blood & Transplant:</span> 35% increase in new donor registrations</li>
-              <li><span>Canadian Blood Services:</span> 28% improvement in appointment bookings</li>
-              <li><span>Red Cross (USA):</span> 40% boost in repeat donation rates</li>
+              <li><span>Breastcancer.org:</span> 40% increase in patient engagement</li>
+              <li><span>Biogen:</span> 60% faster content deployment across markets</li>
+              <li><span>Healthcare Industry Average:</span> 25-35% conversion improvement</li>
             </ul>
           </div>
         </div>
@@ -2057,7 +2057,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
 
             <div className="bg-red-50 rounded-xl p-4 md:p-6 border-2 border-red-200">
               <h3 className="font-bold text-red-900 mb-3">Key Proof Points</h3>
-              {valueDriver === 'revenue' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">NHS Blood & Transplant:</span> 35% increase in new donor registrations</p><p><span className="font-bold">Canadian Blood Services:</span> 28% improvement in appointment booking rates</p><p><span className="font-bold">Red Cross (USA):</span> 40% boost in repeat donation rates</p></div>}
+              {valueDriver === 'revenue' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">Breastcancer.org:</span> 40% increase in patient engagement</p><p><span className="font-bold">Biogen:</span> 60% faster content deployment across markets</p><p><span className="font-bold">Healthcare Industry Average:</span> 25-35% conversion improvement</p></div>}
               {valueDriver === 'efficiency' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">Healthcare Digital Transformation:</span> 60% reduction in administrative processing time</p><p><span className="font-bold">Blood Bank Modernisation:</span> 45% decrease in manual data entry</p><p><span className="font-bold">Hospital Integration:</span> 50% faster order fulfilment</p></div>}
               {valueDriver === 'risk' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">Healthcare Compliance:</span> 99.99% system uptime achieved</p><p><span className="font-bold">Data Security:</span> Zero breaches with modern architecture</p><p><span className="font-bold">Regulatory:</span> Full TGA & APHRA compliance maintained</p></div>}
               {valueDriver === 'cx' && <div className="text-sm text-red-800 space-y-2"><p><span className="font-bold">Donor Experience:</span> 45% improvement in donor satisfaction scores</p><p><span className="font-bold">Mobile Engagement:</span> 60% increase in app-based bookings</p><p><span className="font-bold">Communication:</span> 35% better donor retention through personalised outreach</p></div>}
