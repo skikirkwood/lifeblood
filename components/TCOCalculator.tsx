@@ -25,7 +25,7 @@ const modelConfigs = {
       // Current Platform Costs (Drupal + Oracle)
       drupalLicenseCostPerYear: 0,
       drupalHostingCostPerYear: 180000,
-      drupalMaintenanceCostPerYear: 250000,
+      drupalMaintenanceCostPerYear: 345600, // 24 weeks × 4 devs × $7,200/week ÷ 2 years
       drupalDevCostPerYear: 400000,
       oracleLicenseCostPerYear: 500000,
       oracleHostingCostPerYear: 200000,
@@ -1971,9 +1971,9 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                   </div>
                   
                   <h4 className="font-medium text-gray-700 mb-2 mt-4">Current Drupal Costs (Annual)</h4>
-                  <SliderInput label="Drupal Hosting" value={inputs.drupalHostingCostPerYear} onChange={(val) => handleInputChange('drupalHostingCostPerYear', val)} min={0} max={500000} step={10000} prefix="$" />
-                  <SliderInput label="Drupal Maintenance" value={inputs.drupalMaintenanceCostPerYear} onChange={(val) => handleInputChange('drupalMaintenanceCostPerYear', val)} min={0} max={500000} step={10000} prefix="$" />
-                  <SliderInput label="Drupal Development" value={inputs.drupalDevCostPerYear} onChange={(val) => handleInputChange('drupalDevCostPerYear', val)} min={0} max={800000} step={25000} prefix="$" />
+                  <SliderInput label="Drupal Hosting" value={inputs.drupalHostingCostPerYear} onChange={(val) => handleInputChange('drupalHostingCostPerYear', val)} min={0} max={500000} step={10000} prefix="$" helper="Annual cloud/server hosting costs" />
+                  <SliderInput label="Drupal Maintenance (Upgrades)" value={inputs.drupalMaintenanceCostPerYear} onChange={(val) => handleInputChange('drupalMaintenanceCostPerYear', val)} min={0} max={800000} step={10000} prefix="$" helper="Default: 24 weeks × 4 devs upgrade every 2 years" />
+                  <SliderInput label="Drupal Development" value={inputs.drupalDevCostPerYear} onChange={(val) => handleInputChange('drupalDevCostPerYear', val)} min={0} max={800000} step={25000} prefix="$" helper="Ongoing feature development costs" />
                   
                   <h4 className="font-medium text-gray-700 mb-2 mt-6">Current Oracle Costs (Annual)</h4>
                   <SliderInput label="Oracle Licensing" value={inputs.oracleLicenseCostPerYear} onChange={(val) => handleInputChange('oracleLicenseCostPerYear', val)} min={0} max={1000000} step={25000} prefix="$" />
