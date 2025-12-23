@@ -1405,6 +1405,140 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
     </div>
 
     <!-- Value Driver Slides (conditionally rendered) -->
+    ${enabledDrivers.includes('donations') ? `
+    <!-- Blood Donation Volume -->
+    <div class="slide" data-slide="${2 + enabledDrivers.indexOf('donations')}">
+      <div class="slide-content">
+        <div class="content-left">
+          <div class="eyebrow">Blood Donation Volume</div>
+          <h2>Increasing Life-Saving Collections</h2>
+          <p class="subtitle">A modern digital donor experience drives more donations</p>
+          
+          <ul class="bullet-list">
+            <li>Improved booking experience increases appointment completion rates</li>
+            <li>Personalised communication drives donor retention and return visits</li>
+            <li>Streamlined registration removes barriers for new donors</li>
+          </ul>
+          
+          <div class="breakdown-section">
+            <div class="breakdown-row">
+              <span class="label">From Retention Improvement</span>
+              <span class="value">+${formatNumber(donations.volumeFromRetention)} L</span>
+            </div>
+            <div class="breakdown-row">
+              <span class="label">From New Donor Acquisition</span>
+              <span class="value">+${formatNumber(donations.volumeFromAcquisition)} L</span>
+            </div>
+            <div class="breakdown-row">
+              <span class="label">From Overall Volume Increase</span>
+              <span class="value">+${formatNumber(donations.volumeFromOverallIncrease)} L</span>
+            </div>
+            <div class="breakdown-row total">
+              <span class="label">Total Additional Blood Volume</span>
+              <span class="value" style="color: var(--lb-red);">+${formatNumber(donations.totalAdditionalVolumeLitres)} L</span>
+            </div>
+          </div>
+          
+          <div class="proof-section">
+            <h4>Expected Outcomes</h4>
+            <ul>
+              <li><span>Donor Retention:</span> ${inputs.donorRetentionImprovement}% improvement in repeat donations</li>
+              <li><span>New Donors:</span> ${inputs.newDonorAcquisitionIncrease}% increase in first-time registrations</li>
+              <li><span>Overall Volume:</span> ${inputs.donationIncreasePercent}% increase in total donations</li>
+            </ul>
+          </div>
+        </div>
+        <div class="content-right">
+          <div class="stats-sidebar">
+            <div class="stat-item">
+              <div class="stat-value">+${formatNumber(donations.totalAdditionalVolumeLitres)} L</div>
+              <div class="stat-label">Additional Blood</div>
+              <div class="stat-desc">Annual increase in blood volume collected</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">+${formatNumber(donations.totalAdditionalDonations)}</div>
+              <div class="stat-label">More Donations</div>
+              <div class="stat-desc">Additional donations per year</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">${inputs.donorRetentionImprovement}%</div>
+              <div class="stat-label">Retention Lift</div>
+              <div class="stat-desc">Improvement in donor return rates</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
+    </div>
+    ` : ''}
+
+    ${enabledDrivers.includes('tco') ? `
+    <!-- TCO Savings -->
+    <div class="slide" data-slide="${2 + enabledDrivers.indexOf('tco')}">
+      <div class="slide-content">
+        <div class="content-left">
+          <div class="eyebrow">TCO Savings</div>
+          <h2>Eliminating Legacy Platform Costs</h2>
+          <p class="subtitle">Replacing Drupal and Oracle with a modern headless CMS</p>
+          
+          <ul class="bullet-list">
+            <li>Eliminate Drupal hosting, maintenance, and upgrade costs</li>
+            <li>Remove Oracle licensing, hosting, and development expenses</li>
+            <li>Consolidate to a single, modern content platform</li>
+          </ul>
+          
+          <div class="breakdown-section">
+            <div class="breakdown-row">
+              <span class="label">Current Drupal Costs</span>
+              <span class="value">${formatCurrency(tco.currentDrupalCost)}/year</span>
+            </div>
+            <div class="breakdown-row">
+              <span class="label">Current Oracle Costs</span>
+              <span class="value">${formatCurrency(tco.currentOracleCost)}/year</span>
+            </div>
+            <div class="breakdown-row">
+              <span class="label">Contentful Investment</span>
+              <span class="value">${formatCurrency(tco.contentfulAnnualCost)}/year</span>
+            </div>
+            <div class="breakdown-row total">
+              <span class="label">Annual TCO Savings</span>
+              <span class="value" style="color: var(--lb-green);">${formatCurrency(tco.annualSavings)}</span>
+            </div>
+          </div>
+          
+          <div class="proof-section">
+            <h4>Platform Consolidation Benefits</h4>
+            <ul>
+              <li><span>Legacy Costs Eliminated:</span> ${formatCurrency(tco.totalLegacyCost)}/year</li>
+              <li><span>New Platform Cost:</span> ${formatCurrency(tco.contentfulAnnualCost)}/year</li>
+              <li><span>${roiYears}-Year Savings:</span> ${formatCurrency(tco.annualSavings * roiYears)}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="content-right">
+          <div class="stats-sidebar">
+            <div class="stat-item">
+              <div class="stat-value">${formatCurrency(tco.annualSavings)}</div>
+              <div class="stat-label">Annual Savings</div>
+              <div class="stat-desc">Net reduction in platform costs</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">${formatCurrency(tco.annualSavings * roiYears)}</div>
+              <div class="stat-label">${roiYears}-Year Savings</div>
+              <div class="stat-desc">Total savings over investment period</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">${formatCurrency(tco.totalLegacyCost)}</div>
+              <div class="stat-label">Legacy Costs</div>
+              <div class="stat-desc">Current annual platform spending</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer"><span>© 2025 Lifeblood</span><img src="${logoUrl}" alt="Lifeblood" class="logo"></div>
+    </div>
+    ` : ''}
+
     ${enabledDrivers.includes('revenue') ? `
     <!-- Revenue Growth -->
     <div class="slide" data-slide="${2 + enabledDrivers.indexOf('revenue')}">
