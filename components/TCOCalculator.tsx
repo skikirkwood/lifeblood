@@ -35,7 +35,7 @@ const modelConfigs = {
       // Contentful Investment
       contentfulLicenseCostPerYear: 150000,
       contentfulImplementationCost: 150000,
-      contentfulMaintenanceCostPerYear: 50000,
+      contentfulMaintenanceCostPerYear: 300000,
       implementationTime: 6,
       
       // Legacy fields for compatibility
@@ -2003,7 +2003,7 @@ export default function TCOCalculator({ model, onBack }: TCOCalculatorProps) {
                     <h4 className="font-medium text-gray-700 mb-2">Contentful Investment</h4>
                     <SliderInput label="Contentful Implementation" value={inputs.contentfulImplementationCost} onChange={(val) => handleInputChange('contentfulImplementationCost', val)} min={100000} max={1000000} step={25000} prefix="$" helper="One-time implementation cost" tooltip="One-time cost included in total investment. Used in ROI and payback calculations." />
                     <div className="mt-4"><SliderInput label="Contentful Annual License" value={inputs.contentfulLicenseCostPerYear} onChange={(val) => handleInputChange('contentfulLicenseCostPerYear', val)} min={50000} max={500000} step={10000} prefix="$" tooltip="Annual cost subtracted from TCO savings. License × Years = Total ongoing cost." /></div>
-                    <div className="mt-4"><SliderInput label="Contentful Annual Maintenance" value={inputs.contentfulMaintenanceCostPerYear} onChange={(val) => handleInputChange('contentfulMaintenanceCostPerYear', val)} min={0} max={200000} step={5000} prefix="$" tooltip="Annual cost subtracted from TCO savings. Ongoing support and maintenance costs." /></div>
+                    <div className="mt-4"><SliderInput label="Contentful Annual Maintenance" value={inputs.contentfulMaintenanceCostPerYear} onChange={(val) => handleInputChange('contentfulMaintenanceCostPerYear', val)} min={100000} max={600000} step={25000} prefix="$" tooltip="Annual cost subtracted from TCO savings. Ongoing support and maintenance costs." /></div>
                   </div>
                 </>
               )}
